@@ -22,7 +22,7 @@ export default function Cart() {
     return (
       <section className="section">
         <div className="container empty stack" style={{ alignItems: 'center' }}>
-          <CatalogArt className="choice-art" />
+          <CatalogArt className="intro-art" />
           <h1 style={{ fontSize: 34 }}>Корзина пока пустая</h1>
           <p className="muted" style={{ maxWidth: 480 }}>Можно выбрать товары в каталоге или пройти полное сопровождение: мы поможем собрать всё по шагам.</p>
           <div className="row" style={{ justifyContent: 'center' }}>
@@ -48,7 +48,7 @@ export default function Cart() {
               <div key={agency.id} className="card stack">
                 <div className="row between">
                   <Link to={`/sluzhby/${agency.slug}`} className="row" style={{ textDecoration: 'none', gap: 10 }}>
-                    <div className="seller-ava" style={{ background: agency.color, width: 40, height: 40, fontSize: 16, borderRadius: 12 }}>{agency.short[0]}</div>
+                    <div className="seller-ava">{agency.short[0]}</div>
                     <b>{agency.name}</b>
                   </Link>
                   <span className="small muted">{rub(list.reduce((s, x) => s + x.offer.price * x.line.qty, 0))}</span>

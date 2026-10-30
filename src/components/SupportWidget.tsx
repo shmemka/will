@@ -58,14 +58,15 @@ export default function SupportWidget() {
     <>
       <button className={'sw-fab' + (open ? ' hidden' : '')} onClick={() => setOpen(true)} aria-label="Открыть поддержку">
         <Icon name="chat" />
-        <span>Мы рядом 24/7</span>
+        <span>Мы на связи</span>
+        <i className="live" aria-hidden />
       </button>
       {open && (
         <div className="sw-panel" role="dialog" aria-label="Поддержка">
           <div className="sw-head">
             <div>
-              <b>Поддержка От Души</b>
-              <div className="tiny" style={{ opacity: 0.8 }}>Отвечаем круглосуточно, без выходных</div>
+              <b>Мы рядом</b>
+              <div className="tiny">Отвечаем круглосуточно, без выходных</div>
             </div>
             <button className="icon-btn" onClick={() => setOpen(false)} aria-label="Закрыть">
               <Icon name="close" />
@@ -101,10 +102,11 @@ export default function SupportWidget() {
             </>
           ) : (
             <div className="sw-body">
-              <a href={telLink(SUPPORT_PHONE)} className="btn btn-primary btn-block">
-                <Icon name="phone" size={18} /> {SUPPORT_PHONE}
+              <a href={telLink(SUPPORT_PHONE)} className="call-phone" style={{ fontSize: 24 }}>
+                <Icon name="phone" size={20} /> {SUPPORT_PHONE}
               </a>
-              <p className="small muted center" style={{ margin: '10px 0 18px' }}>Звонок бесплатный. С вами поговорит живой человек.</p>
+              <span className="status-dot" style={{ fontSize: 15 }}>Линия открыта, позвоните нам</span>
+              <p className="small muted" style={{ margin: '4px 0 18px' }}>Звонок бесплатный. С вами поговорит живой человек.</p>
               {sent ? (
                 <div className="notice notice-green">
                   <Icon name="check" />
@@ -112,7 +114,7 @@ export default function SupportWidget() {
                 </div>
               ) : (
                 <form className="stack" onSubmit={callback}>
-                  <b>Или оставьте номер, мы перезвоним</b>
+                  <b className="label">Или оставьте номер, мы перезвоним</b>
                   <input className="input" placeholder="Как к вам обращаться" value={cb.name} onChange={(e) => setCb({ ...cb, name: e.target.value })} />
                   <input className={'input' + (err ? ' error' : '')} placeholder="Телефон" inputMode="tel" value={cb.phone} onChange={(e) => setCb({ ...cb, phone: e.target.value })} />
                   {err && <span className="error-text">{err}</span>}

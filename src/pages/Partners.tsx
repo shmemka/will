@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { HandshakeArt } from '../components/Illustrations'
-import { Crumbs, Icon } from '../components/ui'
+import { Icon } from '../components/ui'
+import PageHead from '../components/PageHead'
 import { savePartnerApplication } from '../lib/api'
 import { isEmail, isPhone } from '../lib/format'
 import { CATEGORIES } from '../data/catalog'
@@ -24,25 +25,17 @@ export default function Partners() {
 
   return (
     <>
-      <section className="section-s">
-        <div className="container">
-          <Crumbs items={[{ to: '/', label: 'Главная' }, { label: 'Для ритуальных служб' }]} />
-          <div className="band bg-white">
-            <div className="stack-l">
-              <span className="badge badge-blue" style={{ alignSelf: 'flex-start' }}>Для ритуальных служб</span>
-              <h1 style={{ fontSize: 'clamp(30px,4vw,46px)' }}>Честные заказы без покупки данных</h1>
-              <p className="lead">
-                Семьи сами выбирают ваши товары и услуги на сайте и оплачивают заказ заранее. Вы получаете готовый заказ с деталями и платите прозрачную комиссию только с выполненных заказов.
-              </p>
-              <div className="row">
-                <a href="#form" className="btn btn-primary">Оставить заявку</a>
-                <Link to="/partner" className="btn btn-outline">Посмотреть кабинет службы</Link>
-              </div>
-            </div>
-            <HandshakeArt />
-          </div>
+      <PageHead
+        crumbs={[{ to: '/', label: 'Главная' }, { label: 'Для ритуальных служб' }]}
+        title="Честные заказы без покупки данных"
+        lead="Семьи сами выбирают ваши товары и услуги на сайте и оплачивают заказ заранее. Вы получаете готовый заказ с деталями и платите прозрачную комиссию только с выполненных заказов."
+        art={<HandshakeArt />}
+      >
+        <div className="row" style={{ marginTop: 24 }}>
+          <a href="#form" className="btn btn-dark">Оставить заявку</a>
+          <Link to="/partner" className="btn btn-white">Посмотреть кабинет службы <Icon name="arrow" /></Link>
         </div>
-      </section>
+      </PageHead>
 
       <section className="section-s">
         <div className="container grid grid-4">
@@ -61,16 +54,16 @@ export default function Partners() {
         </div>
       </section>
 
-      <section className="section bg-sand">
+      <section className="section bg-soft rule">
         <div className="container">
           <h2 style={{ marginBottom: 24 }}>Как устроена работа</h2>
-          <div className="grid grid-3 steps3">
+          <div className="grid grid-3">
             {[
               { t: 'Подключение', s: 'Проверяем документы и цены, загружаем ваш каталог. Это занимает 2-3 дня.' },
               { t: 'Заказы', s: 'Приходит уведомление о новом заказе. У вас есть 30 минут, чтобы его подтвердить.' },
               { t: 'Выполнение и выплата', s: 'После выполнения отмечаете заказ, и мы переводим оплату за вычетом комиссии.' },
             ].map((x, i) => (
-              <div key={x.t} className="step3"><div className="num">{i + 1}</div><h3 style={{ marginBottom: 8 }}>{x.t}</h3><p className="muted">{x.s}</p></div>
+              <div key={x.t} className="card stack"><span className="eyebrow">Шаг {i + 1}</span><h3>{x.t}</h3><p className="muted">{x.s}</p></div>
             ))}
           </div>
           <div className="card stack" style={{ marginTop: 24 }}>

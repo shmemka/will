@@ -64,7 +64,7 @@ export default function PartnerCabinet() {
         <Crumbs items={[{ to: '/partneram', label: 'Для служб' }, { label: 'Кабинет службы' }]} />
         <div className="row between" style={{ marginBottom: 20 }}>
           <div className="row" style={{ gap: 14 }}>
-            <div className="seller-ava" style={{ background: a.color }}>{a.short[0]}</div>
+            <div className="seller-ava">{a.short[0]}</div>
             <div>
               <h1 style={{ fontSize: 'clamp(24px,3vw,34px)' }}>{a.name}</h1>
               <span className="small muted">Демо-кабинет службы · заказы из этого браузера</span>

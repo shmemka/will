@@ -6,7 +6,7 @@ import {
 } from '../data/flow'
 import { AVAILABILITY, agencyOfOffer, offerById, offersByType, typeById } from '../data/catalog'
 import ProductArt from '../components/ProductArt'
-import { SupportArt } from '../components/Illustrations'
+import { OrganizeArt } from '../components/Illustrations'
 import { Icon, Stars } from '../components/ui'
 import { load, plural, rub, save, uid } from '../lib/format'
 import { useCart, useToast } from '../lib/store'
@@ -64,7 +64,7 @@ function Intro({ resume, onStart, onResume }: { resume: boolean; onStart: () => 
   return (
     <section className="section">
       <div className="container flow-wrap stack-l" style={{ alignItems: 'center', textAlign: 'center' }}>
-        <SupportArt className="choice-art" />
+        <OrganizeArt className="intro-art" />
         <h1 style={{ fontSize: 'clamp(30px,4vw,46px)' }}>Мы рядом. Давайте разберёмся вместе</h1>
         <p className="lead" style={{ maxWidth: 620 }}>
           Сначала зададим несколько простых вопросов, чтобы понять вашу ситуацию. Потом предложим три варианта и поможем пройти по шагам: что выбрать, а что можно пропустить.
@@ -126,10 +126,10 @@ function Questions({ d, up }: { d: Draft; up: (p: Partial<Draft>) => void }) {
           <div className="options" role="radiogroup" aria-label={q.title}>
             {q.options.map((o) => (
               <button key={o.value} role="radio" aria-checked={value === o.value} className={'option' + (value === o.value ? ' selected' : '')} onClick={() => choose(o.value)}>
-                <span className="emoji" aria-hidden>{o.icon}</span>
+                <span className="radio" aria-hidden />
                 <span>
                   <strong>{o.label}</strong>
-                  {o.sub && <span>{o.sub}</span>}
+                  {o.sub && <span className="sub">{o.sub}</span>}
                 </span>
               </button>
             ))}
@@ -198,22 +198,20 @@ function Packages({ d, up }: { d: Draft; up: (p: Partial<Draft>) => void }) {
             const names = p.includes.map((t) => typeById(t)?.name).filter(Boolean) as string[]
             return (
               <div key={p.id} className={'pkg' + (p.id === rec ? ' rec' : '')}>
-                <div className="row between">
-                  <span className="badge badge-yellow">{p.name}</span>
-                  {p.id === rec && <span className="badge badge-green">Подходит вам</span>}
-                </div>
+                {p.id === rec && <span className="rec-flag">Подходит вам</span>}
+                <span className="eyebrow">{p.name}</span>
                 <h3>{p.title}</h3>
                 <p className="muted small">{p.desc}</p>
-                <div>
-                  <span className="small muted">Ориентир</span>
-                  <div className="price" style={{ fontSize: 28 }}>около {rub(Math.round(est / 1000) * 1000)}</div>
+                <div style={{ borderTop: '1px solid var(--line)', paddingTop: 14 }}>
+                  <span className="small muted">Ориентировочно</span>
+                  <div className="price" style={{ fontSize: 30 }}>{rub(Math.round(est / 1000) * 1000)}</div>
                 </div>
-                <ul>
+                <ul className="check-list">
                   {names.slice(0, 8).map((n) => <li key={n}><Icon name="check" size={16} /> {n}</li>)}
                   {names.length > 8 && <li className="muted">и ещё {names.length - 8}</li>}
                 </ul>
-                <button className={'btn ' + (p.id === rec ? 'btn-primary' : 'btn-outline')} style={{ marginTop: 'auto' }} onClick={() => pick(p.id)}>
-                  Выбрать «{p.name}»
+                <button className={'btn btn-split ' + (p.id === rec ? 'btn-primary' : 'btn-outline')} style={{ marginTop: 'auto' }} onClick={() => pick(p.id)}>
+                  Выбрать «{p.name}» <Icon name="arrow" />
                 </button>
               </div>
             )
@@ -284,7 +282,7 @@ function Checkpoints({ d, up }: { d: Draft; up: (p: Partial<Draft>) => void }) {
         <div className="layout-side">
           <div className="stack-l">
             <div className="stack" style={{ gap: 8 }}>
-              <span className="badge" style={{ alignSelf: 'flex-start' }}>{cp.icon} Шаг {cpIndex + 1}</span>
+              <span className="eyebrow">Шаг {cpIndex + 1} из {cps.length}</span>
               <h1 style={{ fontSize: 'clamp(26px,3.4vw,38px)' }}>{cp.title}</h1>
               <p className="muted">{cp.why}</p>
             </div>
@@ -364,7 +362,7 @@ function Checkpoints({ d, up }: { d: Draft; up: (p: Partial<Draft>) => void }) {
                   )
                 })}
               </div>
-              <div className="summary-total" style={{ fontSize: 18 }}><span>Сейчас в плане</span><span>{rub(total)}</span></div>
+              <div className="summary-total" style={{ fontSize: 19 }}><span>Сейчас в плане</span><span>{rub(total)}</span></div>
               <button className="btn btn-dark" onClick={() => up({ stage: 'summary' })}>Посмотреть итог</button>
               <button className="btn btn-ghost btn-s" onClick={() => { savePlan(planFromDraft(d)); toast('План сохранён. Он будет в личном кабинете') }}>
                 Сохранить и вернуться позже
@@ -437,7 +435,7 @@ function Summary({ d, up, reset }: { d: Draft; up: (p: Partial<Draft>) => void; 
               return (
                 <div key={c.id} className="card stack">
                   <div className="row between">
-                    <b style={{ fontSize: 18 }}>{c.icon} {c.title}</b>
+                    <h4>{c.title}</h4>
                     <button className="link small" onClick={() => up({ stage: 'checkpoints', cp: idx })}>Изменить</button>
                   </div>
                   {items.length === 0 ? (

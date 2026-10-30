@@ -1,30 +1,24 @@
 import { Link } from 'react-router-dom'
 import { GUIDE_FAQ, GUIDE_STEPS, SUPPORT_PHONE } from '../data/guide'
 import { telLink } from '../data/agencies'
-import { CandleArt } from '../components/Illustrations'
-import { Crumbs, Icon } from '../components/ui'
+import { BenchArt, CandleArt, DotDeco } from '../components/Illustrations'
+import { Icon } from '../components/ui'
+import PageHead from '../components/PageHead'
 
 export default function Guide() {
   return (
     <>
-      <section className="section-s">
-        <div className="container">
-          <Crumbs items={[{ to: '/', label: 'Главная' }, { label: 'Что делать сейчас' }]} />
-          <div className="band bg-white" style={{ gridTemplateColumns: '1.4fr auto' }}>
-            <div className="stack-l">
-              <h1 style={{ fontSize: 'clamp(30px,4vw,46px)' }}>Если близкий человек ушёл</h1>
-              <p className="lead">
-                Нам очень жаль. Эта памятка поможет понять, что делать в первые часы и дни. Читайте в своём темпе, не нужно успеть всё сразу.
-              </p>
-              <div className="row">
-                <a href={telLink(SUPPORT_PHONE)} className="btn btn-primary"><Icon name="phone" size={18} /> Позвонить нам</a>
-                <Link to="/soprovozhdenie" className="btn btn-outline">Помогите всё организовать</Link>
-              </div>
-            </div>
-            <CandleArt className="hero-art" />
-          </div>
+      <PageHead
+        crumbs={[{ to: '/', label: 'Главная' }, { label: 'Что делать сейчас' }]}
+        title="Если близкий человек ушёл"
+        lead="Нам очень жаль. Эта памятка поможет понять, что делать в первые часы и дни. Читайте в своём темпе, не нужно успеть всё сразу."
+        art={<CandleArt />}
+      >
+        <div className="row" style={{ marginTop: 24 }}>
+          <a href={telLink(SUPPORT_PHONE)} className="btn btn-dark"><Icon name="phone" size={18} /> Позвонить нам</a>
+          <Link to="/soprovozhdenie" className="btn btn-white">Помогите всё организовать <Icon name="arrow" /></Link>
         </div>
-      </section>
+      </PageHead>
 
       <section className="section-s">
         <div className="container" style={{ maxWidth: 860 }}>
@@ -49,10 +43,10 @@ export default function Guide() {
         </div>
       </section>
 
-      <section className="section bg-sand">
+      <section className="section bg-soft rule">
         <div className="container" style={{ maxWidth: 860 }}>
-          <h2 style={{ marginBottom: 24 }}>Частые вопросы</h2>
-          <div className="stack">
+          <h2 style={{ marginBottom: 16 }}>Частые вопросы</h2>
+          <div>
             {GUIDE_FAQ.map((f) => (
               <details key={f.q} className="faq">
                 <summary>{f.q}</summary>
@@ -63,18 +57,19 @@ export default function Guide() {
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <div className="band bg-yellow">
-            <div className="stack-l">
-              <h2>Не нужно справляться одному</h2>
-              <p style={{ fontSize: 18 }}>Ответьте на несколько вопросов, и мы предложим варианты с понятной ценой. Или просто позвоните, мы всё сделаем вместе.</p>
-              <div className="row">
-                <Link to="/soprovozhdenie" className="btn btn-dark">Начать подбор</Link>
+      <section className="guides section">
+        <DotDeco style={{ left: -180, top: -80 }} />
+        <div className="container narrow">
+          <div className="guide-card">
+            <div className="stack">
+              <h3>Не нужно справляться одному</h3>
+              <p className="muted">Ответьте на несколько вопросов, и мы предложим варианты с понятной ценой. Или просто позвоните, мы всё сделаем вместе.</p>
+              <div className="row" style={{ marginTop: 8 }}>
+                <Link to="/soprovozhdenie" className="btn btn-primary">Начать подбор <Icon name="arrow" /></Link>
                 <Link to="/kabinet/pamyatka" className="btn btn-outline">Чек-лист в кабинете</Link>
               </div>
             </div>
-            <CandleArt />
+            <div className="art"><BenchArt /></div>
           </div>
         </div>
       </section>

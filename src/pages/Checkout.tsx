@@ -187,8 +187,8 @@ export default function Checkout() {
                 </div>
                 <div className="notice notice-pink small"><Icon name="info" size={18} /> <span>Это демо-оплата. Деньги не списываются, данные карты нигде не сохраняются.</span></div>
                 <div className="pay-methods">
-                  <button type="button" className={'option' + (method === 'card' ? ' selected' : '')} onClick={() => setMethod('card')}><span><strong>Банковская карта</strong><span>Мир, Visa, Mastercard</span></span></button>
-                  <button type="button" className={'option' + (method === 'sbp' ? ' selected' : '')} onClick={() => setMethod('sbp')}><span><strong>СБП</strong><span>Через приложение банка</span></span></button>
+                  <button type="button" className={'option' + (method === 'card' ? ' selected' : '')} onClick={() => setMethod('card')}><span><strong>Банковская карта</strong><span className="sub">Мир, Visa, Mastercard</span></span></button>
+                  <button type="button" className={'option' + (method === 'sbp' ? ' selected' : '')} onClick={() => setMethod('sbp')}><span><strong>СБП</strong><span className="sub">Через приложение банка</span></span></button>
                 </div>
                 {method === 'card' ? (
                   <div className="card-form">

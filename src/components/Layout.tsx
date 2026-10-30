@@ -6,25 +6,26 @@ import { Icon } from './ui'
 import SupportWidget from './SupportWidget'
 import { SUPPORT_PHONE } from '../data/guide'
 import { telLink } from '../data/agencies'
-import { CATEGORIES } from '../data/catalog'
+import { INK } from './Illustrations'
 
 export function Logo() {
   return (
     <Link to="/" className="logo" aria-label="От Души, на главную">
-      <svg viewBox="0 0 40 40" width="36" height="36" aria-hidden="true">
-        <rect width="40" height="40" rx="12" fill="#ffdf4e" />
-        <path d="M20 30c-6-4-10-7.5-10-12.2A5 5 0 0 1 20 16a5 5 0 0 1 10 1.8C30 22.5 26 26 20 30z" fill="#23233f" />
+      <svg viewBox="0 0 34 34" width="30" height="30" aria-hidden="true">
+        <path d="M17 29 C8 23 3 18 3 12 A7 7 0 0 1 17 9 A7 7 0 0 1 31 12 C31 18 26 23 17 29 Z" fill="none" stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
+        <path d="M9 13 c1.5 -3 4 -4 6 -2" fill="none" stroke={INK} strokeWidth="2" strokeLinecap="round" />
       </svg>
-      <span>От Души</span>
+      <span className="logo-word">От Души</span>
     </Link>
   )
 }
 
 const NAV = [
-  { to: '/soprovozhdenie', label: 'Полное сопровождение' },
+  { to: '/soprovozhdenie', label: 'Сопровождение' },
   { to: '/katalog', label: 'Каталог' },
   { to: '/sluzhby', label: 'Службы' },
   { to: '/chto-delat', label: 'Что делать сейчас' },
+  { to: '/partneram', label: 'Для служб' },
 ]
 
 function Header() {
@@ -57,16 +58,15 @@ function Header() {
         <div className="header-actions">
           <form className="search" onSubmit={submit} role="search">
             <Icon name="search" size={18} />
-            <input className="search-input" placeholder="Поиск" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Поиск по каталогу" />
+            <input className="search-input" placeholder="Найти" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Поиск по каталогу" />
           </form>
-          <a href={telLink(SUPPORT_PHONE)} className="header-phone">
-            <span className="tiny muted">Круглосуточно</span>
-            <b>{SUPPORT_PHONE}</b>
+          <a href={telLink(SUPPORT_PHONE)} className="header-phone" aria-label={`Позвонить ${SUPPORT_PHONE}`}>
+            <Icon name="phone" size={18} /> <span>{SUPPORT_PHONE}</span>
           </a>
-          <Link to="/kabinet" className="icon-btn" aria-label={user ? 'Личный кабинет' : 'Войти'}>
+          <Link to="/kabinet" className="icon-btn" aria-label={user ? 'Личный кабинет' : 'Войти'} title={user ? 'Личный кабинет' : 'Войти'}>
             <Icon name="user" />
           </Link>
-          <Link to="/korzina" className="icon-btn" aria-label={`Корзина, ${count}`}>
+          <Link to="/korzina" className="icon-btn" aria-label={`Корзина, ${count}`} title="Корзина">
             <Icon name="cart" />
             {count > 0 && <span className="dot">{count}</span>}
           </Link>
@@ -77,17 +77,16 @@ function Header() {
       </div>
       {open && (
         <div className="mobile-menu">
-          <div className="container stack">
+          <div className="container">
             <form className="search search-m" onSubmit={submit} role="search">
               <Icon name="search" size={18} />
-              <input className="search-input" placeholder="Поиск по каталогу" value={q} onChange={(e) => setQ(e.target.value)} />
+              <input className="search-input" placeholder="Найти в каталоге" value={q} onChange={(e) => setQ(e.target.value)} />
             </form>
             {NAV.map((n) => (
-              <Link key={n.to} to={n.to} className="mobile-link">{n.label}</Link>
+              <Link key={n.to} to={n.to} className="mobile-link">{n.label} <Icon name="arrow" /></Link>
             ))}
-            <Link to="/partneram" className="mobile-link">Для ритуальных служб</Link>
-            <Link to="/kabinet" className="mobile-link">{user ? 'Личный кабинет' : 'Войти'}</Link>
-            <a href={telLink(SUPPORT_PHONE)} className="btn btn-primary">
+            <Link to="/kabinet" className="mobile-link">{user ? 'Личный кабинет' : 'Войти'} <Icon name="arrow" /></Link>
+            <a href={telLink(SUPPORT_PHONE)} className="btn btn-dark btn-block" style={{ marginTop: 20 }}>
               <Icon name="phone" size={18} /> {SUPPORT_PHONE}
             </a>
           </div>
@@ -101,41 +100,36 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container">
+        <div className="footer-top"><Logo /></div>
         <div className="footer-grid">
-          <div className="stack">
-            <Logo />
-            <p className="muted small" style={{ maxWidth: 320 }}>
-              Помогаем семьям проститься с близкими бережно, спокойно и по честной цене. Работаем с проверенными службами Москвы.
-            </p>
-            <a href={telLink(SUPPORT_PHONE)} className="footer-phone">{SUPPORT_PHONE}</a>
-            <span className="small muted">Мы на связи круглосуточно</span>
-          </div>
-          <div className="stack">
-            <h4>Помощь</h4>
-            <Link to="/soprovozhdenie">Полное сопровождение</Link>
-            <Link to="/katalog">Каталог</Link>
-            <Link to="/chto-delat">Что делать сейчас</Link>
+          <div className="footer-col">
+            <h4>О сервисе</h4>
+            <Link to="/chto-delat">Что делать, если близкий ушёл</Link>
             <Link to="/sluzhby">Ритуальные службы</Link>
-          </div>
-          <div className="stack">
-            <h4>Категории</h4>
-            {CATEGORIES.slice(0, 6).map((c) => (
-              <Link key={c.id} to={`/katalog?cat=${c.id}`}>{c.name}</Link>
-            ))}
-          </div>
-          <div className="stack">
-            <h4>Сервис</h4>
-            <Link to="/kabinet">Личный кабинет</Link>
             <Link to="/partneram">Для ритуальных служб</Link>
             <Link to="/partner">Кабинет службы</Link>
-            <Link to="/dokumenty/privacy">Политика конфиденциальности</Link>
-            <Link to="/dokumenty/terms">Условия сервиса</Link>
+            <Link to="/kabinet">Личный кабинет</Link>
+          </div>
+          <div className="footer-col">
+            <h4>Связаться с нами</h4>
+            <a href={telLink(SUPPORT_PHONE)} style={{ fontWeight: 700, fontSize: 20 }}>{SUPPORT_PHONE}</a>
+            <span className="status-dot" style={{ fontSize: 15 }}>Линия открыта круглосуточно</span>
+            <span className="small muted" style={{ marginTop: 6 }}>Звонок бесплатный по всей России</span>
+          </div>
+          <div className="footer-col footer-big">
+            <h4>Чем мы помогаем</h4>
+            <Link to="/soprovozhdenie">Сопровождение <Icon name="arrow" /></Link>
+            <Link to="/katalog">Каталог <Icon name="arrow" /></Link>
+            <Link to="/chto-delat">Памятка <Icon name="arrow" /></Link>
           </div>
         </div>
-        <hr className="divider" />
-        <p className="tiny muted">
-          © 2026 От Души. Сервис помогает выбрать товары и услуги ритуальных служб Москвы. Услуги оказывают сами службы. Информация на сайте не является юридической консультацией.
-        </p>
+        <div className="footer-bottom">
+          <Link to="/dokumenty/privacy">Политика конфиденциальности</Link>
+          <Link to="/dokumenty/terms">Условия сервиса</Link>
+        </div>
+        <div className="footer-bottom" style={{ borderTop: 0, marginTop: 8, paddingTop: 0 }}>
+          <p>© 2026 От Души · Сервис помогает выбрать товары и услуги ритуальных служб Москвы. Услуги оказывают сами службы. Информация на сайте не является юридической консультацией.</p>
+        </div>
       </div>
     </footer>
   )
@@ -149,15 +143,9 @@ export default function Layout() {
   return (
     <>
       <a href="#main" className="sr-only">Перейти к содержимому</a>
-      {isDemo ? (
-        <div className="demo-bar">
-          <b>Демо-версия.</b> Товары, цены и отзывы примерные, оплата не списывает деньги.
-        </div>
-      ) : (
-        <div className="demo-bar">
-          <b>Тестовый запуск.</b> Товары, цены и отзывы примерные, оплата не списывает деньги.
-        </div>
-      )}
+      <div className="demo-bar">
+        <b>{isDemo ? 'Демо-версия.' : 'Тестовый запуск.'}</b> Товары, цены и отзывы примерные, оплата не списывает деньги.
+      </div>
       <Header />
       <main id="main">
         <Outlet />

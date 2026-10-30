@@ -61,7 +61,7 @@ export default function Product() {
             </div>
 
             <Link to={`/sluzhby/${agency.slug}`} className="seller-card">
-              <div className="seller-ava" style={{ background: agency.color }}>{agency.short[0]}</div>
+              <div className="seller-ava">{agency.short[0]}</div>
               <div style={{ flex: 1 }}>
                 <span className="tiny muted">Продавец</span>
                 <b style={{ display: 'block' }}>{agency.name}</b>

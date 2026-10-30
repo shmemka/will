@@ -2,7 +2,9 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AGENCIES } from '../data/agencies'
 import { offersByAgency } from '../data/catalog'
-import { Crumbs, Icon, Stars } from '../components/ui'
+import { Icon, Stars } from '../components/ui'
+import PageHead from '../components/PageHead'
+import { HandshakeArt } from '../components/Illustrations'
 import { plural } from '../lib/format'
 
 const OKRUGS = ['ЦАО', 'САО', 'СВАО', 'ВАО', 'ЮВАО', 'ЮАО', 'ЮЗАО', 'ЗАО', 'СЗАО']
@@ -12,15 +14,10 @@ export default function Agencies() {
   const [only24, setOnly24] = useState(false)
   const list = useMemo(() => AGENCIES.filter((a) => (okrug === 'all' || a.okrug === okrug) && (!only24 || a.dispatcher24)), [okrug, only24])
   return (
-    <section className="section-s">
+    <>
+    <PageHead crumbs={[{ to: '/', label: 'Главная' }, { label: 'Службы' }]} title="Ритуальные службы Москвы" lead="Специализированные службы по вопросам похоронного дела. У каждой своя страница с товарами, контактами и отзывами." art={<HandshakeArt />} />
+    <section className="section-s" style={{ paddingTop: 16 }}>
       <div className="container">
-        <Crumbs items={[{ to: '/', label: 'Главная' }, { label: 'Службы' }]} />
-        <div className="section-head">
-          <div className="stack" style={{ gap: 8 }}>
-            <h1 style={{ fontSize: 'clamp(30px,4vw,44px)' }}>Ритуальные службы Москвы</h1>
-            <p className="muted">Специализированные службы по вопросам похоронного дела. У каждой своя страница с товарами, контактами и отзывами.</p>
-          </div>
-        </div>
         <div className="row" style={{ marginBottom: 20 }}>
           <div className="chips" style={{ flex: 1 }}>
             <button className={'chip' + (okrug === 'all' ? ' active' : '')} onClick={() => setOkrug('all')}>Все округа</button>
@@ -34,9 +31,9 @@ export default function Agencies() {
             return (
               <Link key={a.id} to={`/sluzhby/${a.slug}`} className="card card-link stack">
                 <div className="row" style={{ gap: 14 }}>
-                  <div className="seller-ava" style={{ background: a.color }}>{a.short[0]}</div>
+                  <div className="seller-ava">{a.short[0]}</div>
                   <div>
-                    <b style={{ lineHeight: 1.3, display: 'block' }}>{a.name}</b>
+                    <h4>{a.name}</h4>
                     <div className="row small" style={{ gap: 6 }}><Stars value={a.rating} size={13} /> <span className="muted">{a.rating.toFixed(1)}</span></div>
                   </div>
                 </div>
@@ -55,5 +52,6 @@ export default function Agencies() {
         {list.length === 0 && <p className="empty muted">В этом округе пока нет служб с такими условиями. Попробуйте выбрать другой округ.</p>}
       </div>
     </section>
+    </>
   )
 }

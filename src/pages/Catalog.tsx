@@ -4,7 +4,9 @@ import { CATEGORIES, OFFERS, TYPES, categoryById, minPrice, offersByType, typeBy
 import { AGENCIES } from '../data/agencies'
 import ProductArt from '../components/ProductArt'
 import ProductCard from '../components/ProductCard'
-import { Crumbs, Icon } from '../components/ui'
+import { Icon } from '../components/ui'
+import PageHead from '../components/PageHead'
+import { CatalogArt } from '../components/Illustrations'
 import { rub, plural } from '../lib/format'
 import { sortOffers, type SortKey } from './Home'
 
@@ -47,20 +49,18 @@ export default function Catalog() {
   const grouped = CATEGORIES.map((c) => ({ c, list: types.filter((t) => t.category === c.id) })).filter((g) => g.list.length)
 
   return (
-    <section className="section-s">
+    <>
+    <PageHead
+      crumbs={[{ to: '/', label: 'Главная' }, { label: 'Каталог' }]}
+      title={cat === 'all' ? 'Каталог' : categoryById(cat)?.name}
+      lead="Выберите, что вам нужно. Для каждого товара можно сравнить цены и условия у всех служб, где он есть."
+      art={<CatalogArt />}
+    />
+    <section className="section-s" style={{ paddingTop: 16 }}>
       <div className="container">
-        <Crumbs items={[{ to: '/', label: 'Главная' }, { label: 'Каталог' }]} />
-        <div className="section-head">
-          <div className="stack" style={{ gap: 8 }}>
-            <h1 style={{ fontSize: 'clamp(30px,4vw,44px)' }}>{cat === 'all' ? 'Каталог' : categoryById(cat)?.name}</h1>
-            <p className="muted">
-              Выберите, что вам нужно. Для каждого товара можно сравнить цены и условия у всех служб, где он есть.
-            </p>
-          </div>
-          <div className="tabs" style={{ marginBottom: 0, borderBottom: 0 }}>
-            <button className={'tab' + (view === 'types' ? ' active' : '')} onClick={() => set('view', null)}>Основные товары</button>
-            <button className={'tab' + (view === 'offers' ? ' active' : '')} onClick={() => set('view', 'offers')}>Все предложения</button>
-          </div>
+        <div className="tabs">
+          <button className={'tab' + (view === 'types' ? ' active' : '')} onClick={() => set('view', null)}>Основные товары</button>
+          <button className={'tab' + (view === 'offers' ? ' active' : '')} onClick={() => set('view', 'offers')}>Все предложения</button>
         </div>
 
         {q && (
@@ -79,13 +79,13 @@ export default function Catalog() {
         </div>
 
         {view === 'types' ? (
-          <div className="stack-l" style={{ marginTop: 18 }}>
+          <div className="stack-l" style={{ marginTop: 32, gap: 48 }}>
             {grouped.length === 0 && <Empty />}
             {grouped.map(({ c, list }) => (
               <div key={c.id}>
                 {cat === 'all' && (
                   <div className="row between" style={{ marginBottom: 14 }}>
-                    <h2 style={{ fontSize: 26 }}>{c.name}</h2>
+                    <h3>{c.name}</h3>
                     <button className="link small" onClick={() => set('cat', c.id)}>Только эта категория</button>
                   </div>
                 )}
@@ -100,7 +100,7 @@ export default function Catalog() {
                           <span className="small muted">{n} {plural(n, 'служба', 'службы', 'служб')}</span>
                           <div className="pcard-foot">
                             <span className="price">от {rub(minPrice(t.id))}{t.unit && <span className="small muted" style={{ fontWeight: 500 }}> / {t.unit}</span>}</span>
-                            <span className="btn btn-s btn-primary">Сравнить</span>
+                            <span className="btn btn-xs btn-primary">Сравнить</span>
                           </div>
                         </div>
                       </Link>
@@ -140,6 +140,7 @@ export default function Catalog() {
         </div>
       </div>
     </section>
+    </>
   )
 }
 

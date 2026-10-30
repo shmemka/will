@@ -52,7 +52,7 @@ export default function TypePage() {
             const inCart = cart.has(o.id)
             return (
               <div key={o.id} className="compare-row">
-                <div className="seller-ava" style={{ background: a.color, width: 48, height: 48 }}>{a.short[0]}</div>
+                <div className="seller-ava">{a.short[0]}</div>
                 <div>
                   <Link to={`/sluzhby/${a.slug}`} style={{ fontWeight: 700, textDecoration: 'none' }}>{a.name}</Link>
                   <div className="row small" style={{ gap: 6 }}>

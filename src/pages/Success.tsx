@@ -3,7 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { agencyById } from '../data/agencies'
 import { getOrder, type Order } from '../lib/api'
 import { rub } from '../lib/format'
-import { SupportArt } from '../components/Illustrations'
+import { CandleArt } from '../components/Illustrations'
 import { Icon } from '../components/ui'
 import { SUPPORT_PHONE } from '../data/guide'
 
@@ -20,7 +20,7 @@ export default function Success() {
     <section className="section">
       <div className="container flow-wrap stack-l">
         <div className="center stack" style={{ alignItems: 'center' }}>
-          <SupportArt className="choice-art" />
+          <CandleArt className="intro-art" />
           <h1 style={{ fontSize: 'clamp(30px,4vw,44px)' }}>Спасибо. Заказ принят</h1>
           {order && <span className="badge badge-yellow" style={{ fontSize: 15 }}>Номер заказа {order.number}</span>}
           <p className="lead" style={{ maxWidth: 600 }}>

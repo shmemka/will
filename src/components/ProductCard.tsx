@@ -19,22 +19,18 @@ export default function ProductCard({ offer, compact }: { offer: Offer; compact?
       </Link>
       <div className="pcard-body">
         <Link to={`/tovar/${offer.id}`} className="pcard-title">{offerTitle(offer)}</Link>
-        {!compact && (
-          <Link to={`/sluzhby/${agency.slug}`} className="pcard-seller">
-            {agency.short}
-          </Link>
-        )}
-        <div className="row" style={{ gap: 6 }}>
-          <Icon name="star" size={14} className="star-y" />
-          <span className="small"><b>{offer.rating.toFixed(1)}</b> <span className="muted">· {AVAILABILITY[offer.available].toLowerCase()}</span></span>
-        </div>
+        {!compact && <Link to={`/sluzhby/${agency.slug}`} className="pcard-seller">{agency.short}</Link>}
+        <span className="pcard-meta">
+          <Icon name="star" size={13} /> {offer.rating.toFixed(1)}
+          {offer.available !== 'today' && <> · {AVAILABILITY[offer.available].toLowerCase()}</>}
+        </span>
         <div className="pcard-foot">
           <span className="price">
             {rub(offer.price)}
-            {type.unit && <span className="small muted" style={{ fontWeight: 500 }}> / {type.unit}</span>}
+            {type.unit && <span className="small muted" style={{ fontWeight: 400 }}> / {type.unit}</span>}
           </span>
           <button
-            className={'btn btn-s ' + (inCart ? 'btn-outline' : 'btn-primary')}
+            className={'btn btn-xs ' + (inCart ? 'btn-outline' : 'btn-primary')}
             onClick={() => {
               if (inCart) return
               cart.add(offer.id)
@@ -42,7 +38,7 @@ export default function ProductCard({ offer, compact }: { offer: Offer; compact?
             }}
             aria-label={inCart ? 'Уже в корзине' : 'В корзину'}
           >
-            {inCart ? <Icon name="check" size={16} /> : <Icon name="plus" size={16} />}
+            <Icon name={inCart ? 'check' : 'plus'} size={16} />
             <span className="hide-s">{inCart ? 'В корзине' : 'В корзину'}</span>
           </button>
         </div>

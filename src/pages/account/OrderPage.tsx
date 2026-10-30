@@ -55,7 +55,7 @@ export default function OrderPage() {
                 <div key={p.id} className="card stack-l">
                   <div className="row between">
                     <Link to={`/sluzhby/${a.slug}`} className="row" style={{ textDecoration: 'none', gap: 10 }}>
-                      <div className="seller-ava" style={{ background: a.color, width: 44, height: 44, fontSize: 18, borderRadius: 14 }}>{a.short[0]}</div>
+                      <div className="seller-ava">{a.short[0]}</div>
                       <div><b style={{ display: 'block' }}>{a.name}</b><span className="small muted">{a.phones[0].number}</span></div>
                     </Link>
                     <span className={'badge ' + PART_STATUS[p.status].tone}>{PART_STATUS[p.status].label}</span>
