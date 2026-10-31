@@ -24,7 +24,7 @@ export function TornEdge({ color = YEL, flip, className }: { color?: string; fli
 
 
 /* ---------- Иллюстрации: тонкая линия и одно жёлтое пятно ---------- */
-const BG = '#F6F3EC'
+const BG = '#FFFFFF'
 const L = { fill: 'none', stroke: INK, strokeWidth: 1.6, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
 
 type IlloProps = { className?: string; title?: string }
