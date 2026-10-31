@@ -13,7 +13,6 @@ export default function Guide() {
         crumbs={[{ to: '/', label: 'Главная' }, { label: 'Что делать сейчас' }]}
         title="Если близкий человек ушёл"
         lead="Нам очень жаль. Эта памятка поможет понять, что делать в первые часы и дни. Читайте в своём темпе, не нужно успеть всё сразу."
-        art={<ScenePhoto id={SCENE.guideFirst} ratio="4 / 3" />}
       >
         <div className="row" style={{ marginTop: 24 }}>
           <a href={telLink(SUPPORT_PHONE)} className="btn btn-dark"><Icon name="phone" size={18} /> Позвонить нам</a>
