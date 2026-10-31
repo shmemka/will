@@ -42,7 +42,7 @@ export default function Success() {
         <div className="notice notice-green">
           <Icon name="mail" />
           {checkEmail ? (
-            <span>Мы отправили письмо на <b>{order?.customer.email}</b>. Нажмите на ссылку в нём, чтобы войти в личный кабинет. Пароль не нужен.</span>
+            <span>Мы отправили письмо на <b>{order?.customer.email}</b>. Нажмите на ссылку в нём или <Link to="/kabinet" className="link">введите код из письма</Link>, чтобы войти в личный кабинет. Пароль не нужен.</span>
           ) : (
             <span>Мы создали для вас личный кабинет на <b>{order?.customer.email}</b>. Там все заказы, статусы и контакты служб.</span>
           )}

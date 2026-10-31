@@ -73,17 +73,36 @@ export function onAuthChange(cb: () => void) {
   return () => window.removeEventListener('storage', h)
 }
 
-/** Вход по ссылке из письма. В демо-режиме входим сразу. Возвращает true, если нужно проверить почту. */
+/** Понятный текст ошибки входа */
+export function authErrorText(msg?: string | null): string {
+  const m = (msg ?? '').toLowerCase()
+  if (!m) return 'Не получилось войти. Попробуйте ещё раз или позвоните нам.'
+  if (m.includes('rate limit') || m.includes('security purposes') || m.includes('only request this')) return 'Письмо уже отправлено недавно. Подождите минуту и попробуйте снова.'
+  if (m.includes('expired') || m.includes('invalid') || m.includes('otp_expired')) return 'Ссылка или код устарели либо уже использованы. Запросите новое письмо.'
+  if (m.includes('not authorized')) return 'Почтовый сервис пока не может отправлять письма на этот адрес. Мы уже чиним это, позвоните нам, и мы поможем войти.'
+  if (m.includes('sending') || m.includes('smtp')) return 'Не получилось отправить письмо. Попробуйте позже или позвоните нам.'
+  return 'Не получилось войти: ' + msg
+}
+
+/** Вход по ссылке или коду из письма. В демо-режиме входим сразу. Возвращает true, если нужно проверить почту. */
 export async function signInWithEmail(email: string, profile?: { name?: string; phone?: string }): Promise<{ checkEmail: boolean; error?: string }> {
   if (supabase) {
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}kabinet`, data: profile },
+      options: { emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}kabinet`, data: profile, shouldCreateUser: true },
     })
-    return { checkEmail: true, error: error?.message }
+    try { sessionStorage.setItem('od_login_email', email) } catch { /* без хранилища тоже работает */ }
+    return { checkEmail: true, error: error ? authErrorText(error.message) : undefined }
   }
   save(LS.session, { email, ...profile })
   return { checkEmail: false }
+}
+
+/** Вход по коду из письма (6 цифр) */
+export async function verifyEmailCode(email: string, token: string): Promise<{ error?: string }> {
+  if (!supabase) return {}
+  const { error } = await supabase.auth.verifyOtp({ email, token, type: 'email' })
+  return { error: error ? authErrorText(error.message) : undefined }
 }
 
 export async function updateProfile(p: { name?: string; phone?: string }) {
