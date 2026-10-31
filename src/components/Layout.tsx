@@ -144,7 +144,9 @@ export default function Layout() {
       <a href="#main" className="sr-only">Перейти к содержимому</a>
       <Header />
       <main id="main">
-        <Outlet />
+        <div key={loc.pathname} className="page-in">
+          <Outlet />
+        </div>
       </main>
       <Footer />
       <SupportWidget />

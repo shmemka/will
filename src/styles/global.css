@@ -140,7 +140,7 @@ p { margin: 0; }
 .status-dot::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--green); }
 
 /* Табы категорий: текст с подчёркиванием */
-.chips { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line); }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--line); position: relative; }
 .chips::-webkit-scrollbar { display: none; }
 .chip {
   display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto;
@@ -225,7 +225,7 @@ p { margin: 0; }
 
 .price { font-weight: 700; letter-spacing: -0.01em; font-family: var(--sans); }
 .empty { text-align: center; padding: 56px 20px; }
-.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 28px; overflow-x: auto; }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 28px; position: relative; }
 .tab { padding: 14px 16px 13px; border: 0; background: none; font-weight: 500; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; color: var(--ink-2); white-space: nowrap; text-decoration: none; font-size: 16px; display: inline-flex; gap: 8px; align-items: center; }
 .tab:hover { color: var(--ink); }
 .tab.active { color: var(--ink); border-bottom-color: var(--yellow); font-weight: 700; }
@@ -234,3 +234,4 @@ p { margin: 0; }
 .check-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .check-list li { display: flex; gap: 10px; align-items: flex-start; }
 .check-list li svg { flex: 0 0 auto; margin-top: 3px; }
+

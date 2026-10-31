@@ -324,3 +324,53 @@ details.faq p { margin-top: 12px; color: var(--ink-2); max-width: 760px; }
 @media (max-width: 560px) { .oc { flex-basis: 82%; } }
 .layout-side > * { min-width: 0; }
 @media (max-width: 560px) { .oslider-head .row { display: none; } }
+
+/* ---------- Спокойная анимация ---------- */
+:root { --ease-soft: cubic-bezier(.22, 1, .36, 1); }
+
+/* Скользящая черта у вкладок, категорий и меню */
+.has-ink { position: relative; }
+.tab-ink { position: absolute; left: 0; top: 0; height: 3px; background: var(--yellow); border-radius: 2px; pointer-events: none; opacity: 0;
+  transition: transform .5s var(--ease-soft), width .5s var(--ease-soft), opacity .3s ease; will-change: transform, width; }
+.nav-main .tab-ink { height: 2px; background: var(--ink); border-radius: 0; }
+.has-ink > .tab.active, .has-ink > .chip.active { border-bottom-color: transparent; }
+.nav-main.has-ink .nav-link.active, .nav-main.has-ink .nav-link:hover { border-bottom-color: transparent; }
+.tab, .chip, .nav-link { transition: color .3s ease; }
+.nav-main { position: relative; }
+
+/* Мягкое появление страницы и шагов */
+.page-in { animation: pageIn .6s var(--ease-soft) both; }
+.fade-key { animation: pageIn .5s var(--ease-soft) both; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* Блоки появляются при прокрутке */
+.rv { opacity: 0; transform: translateY(18px); transition: opacity .8s ease var(--rv-delay, 0ms), transform .9s var(--ease-soft) var(--rv-delay, 0ms); }
+.rv.rv-in { opacity: 1; transform: none; }
+
+/* Фото проявляются после загрузки */
+.photo img { opacity: 0; transition: opacity .7s ease, transform .5s ease; }
+.photo img.ok { opacity: 1; }
+
+/* Карточки и кнопки отзываются плавно */
+.btn { transition: background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .3s var(--ease-soft), color .3s ease; }
+.btn:active { transform: scale(.98); }
+.pcard, .card-link, .service, .oc { transition: box-shadow .4s ease, transform .4s var(--ease-soft), border-color .3s ease; }
+.pcard:hover, .card-link:hover, .service:hover, .oc:hover { transform: translateY(-3px); }
+.option, .offer-pick, .type-tab, .cp-item { transition: border-color .3s ease, box-shadow .3s ease, background .3s ease; }
+.oc .oc-body { transition: background .4s ease; }
+.progress > div { transition: width .7s var(--ease-soft); }
+input, select, textarea { transition: border-color .3s ease, box-shadow .3s ease; }
+
+/* Окна и подсказки */
+.modal-back { animation: fadeIn .3s ease both; }
+.modal { animation: modalIn .45s var(--ease-soft) both; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalIn { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+.toast { animation: toastIn .45s var(--ease-soft); }
+.sw-panel { animation: modalIn .4s var(--ease-soft) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .rv { opacity: 1; transform: none; }
+}
+@media (max-width: 560px) { .chips .chip { padding-left: 10px; padding-right: 10px; } }

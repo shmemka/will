@@ -5,6 +5,7 @@ import App from './App'
 import { AuthProvider, CartProvider, ToastProvider } from './lib/store'
 import './styles/global.css'
 import './styles/components.css'
+import { startMotion } from './lib/motion'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -19,3 +20,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </BrowserRouter>
   </React.StrictMode>,
 )
+
+startMotion()

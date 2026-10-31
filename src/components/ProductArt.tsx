@@ -12,7 +12,7 @@ export default function ProductArt({ typeId, palette = 0, view = 0, className, l
   const v = VIEWS[view % VIEWS.length]
   return (
     <div className={'photo ' + (className ?? '')} style={{ aspectRatio: ratio }}>
-      <img src={photoUrl(id)} alt={label ?? ''} loading="lazy" decoding="async" style={{ transform: v.transform, objectPosition: v.objectPosition }} />
+      <img ref={imgReady} onLoad={imgLoaded} src={photoUrl(id)} alt={label ?? ''} loading="lazy" decoding="async" style={{ transform: v.transform, objectPosition: v.objectPosition }} />
     </div>
   )
 }
@@ -20,7 +20,15 @@ export default function ProductArt({ typeId, palette = 0, view = 0, className, l
 export function ScenePhoto({ id, className, alt = '', ratio, position }: { id: string; className?: string; alt?: string; ratio?: string; position?: string }) {
   return (
     <div className={'photo ' + (className ?? '')} style={ratio ? { aspectRatio: ratio } : undefined}>
-      <img src={photoUrl(id)} alt={alt} loading="lazy" decoding="async" style={position ? { objectPosition: position } : undefined} />
+      <img ref={imgReady} onLoad={imgLoaded} src={photoUrl(id)} alt={alt} loading="lazy" decoding="async" style={position ? { objectPosition: position } : undefined} />
     </div>
   )
+}
+
+// Мягкое появление фотографий после загрузки
+function imgLoaded(e: React.SyntheticEvent<HTMLImageElement>) {
+  e.currentTarget.classList.add('ok')
+}
+function imgReady(el: HTMLImageElement | null) {
+  if (el && el.complete && el.naturalWidth) el.classList.add('ok')
 }

@@ -119,7 +119,7 @@ function Questions({ d, up }: { d: Draft; up: (p: Partial<Draft>) => void }) {
           <div className="progress" aria-label="Прогресс вопросов"><div style={{ width: `${((qi + 1) / qs.length) * 100}%` }} /></div>
           <span className="small muted nowrap">{qi + 1} из {qs.length}</span>
         </div>
-        <div className="stack-l">
+        <div className="stack-l fade-key" key={q.key}>
           <div className="stack" style={{ gap: 10 }}>
             <h1 style={{ fontSize: 'clamp(26px,3.4vw,38px)' }}>{q.title}</h1>
             {q.hint && <p className="muted">{q.hint}</p>}
@@ -281,7 +281,7 @@ function Checkpoints({ d, up }: { d: Draft; up: (p: Partial<Draft>) => void }) {
         </div>
 
         <div className="layout-side">
-          <div className="stack-l">
+          <div className="stack-l fade-key" key={cp.id}>
             <div className="stack" style={{ gap: 8 }}>
               <span className="eyebrow">Шаг {cpIndex + 1} из {cps.length}</span>
               <h1 style={{ fontSize: 'clamp(26px,3.4vw,38px)' }}>{cp.title}</h1>
