@@ -81,6 +81,7 @@ export function authErrorText(msg?: string | null): string {
   if (m.includes('already registered') || m.includes('already been registered') || m.includes('user_already_exists')) return 'На эту почту уже есть кабинет. Введите пароль от него.'
   if (m.includes('password should be') || m.includes('weak password') || m.includes('at least')) return 'Пароль слишком простой: нужно не меньше 6 символов.'
   if (m.includes('email not confirmed')) return 'Почта ещё не подтверждена. Позвоните нам, и мы поможем войти.'
+  if (m.includes('email rate limit') || m.includes('sending') && m.includes('email')) return 'Сейчас не получается создать кабинет: сервис пытается отправить письмо для подтверждения почты. Позвоните нам, и мы поможем.'
   if (m.includes('rate limit') || m.includes('security purposes')) return 'Слишком много попыток. Подождите минуту и попробуйте снова.'
   if (m.includes('invalid') && m.includes('email')) return 'Проверьте адрес почты.'
   return 'Не получилось войти: ' + msg
