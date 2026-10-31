@@ -80,4 +80,7 @@ scripts/       generate-seed.ts
 
 ## Деплой
 
+**GitHub Pages.** Сайт собирается и публикуется автоматически при каждом пуше в `main` (`.github/workflows/deploy.yml`) по адресу https://shmemka.github.io/will/. В настройках репозитория Settings -> Pages -> Source должно стоять **GitHub Actions**. В Supabase (Authentication -> URL Configuration) добавьте `https://shmemka.github.io/will/kabinet` в Redirect URLs.
+
+**Другие хостинги.** 
 Подходит любой статический хостинг. Для Vercel и Netlify уже есть правила для SPA (`vercel.json`, `public/_redirects`). Не забудьте указать переменные `VITE_SUPABASE_URL` и `VITE_SUPABASE_ANON_KEY` в настройках хостинга.

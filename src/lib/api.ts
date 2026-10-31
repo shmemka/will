@@ -78,7 +78,7 @@ export async function signInWithEmail(email: string, profile?: { name?: string; 
   if (supabase) {
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/kabinet`, data: profile },
+      options: { emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}kabinet`, data: profile },
     })
     return { checkEmail: true, error: error?.message }
   }
