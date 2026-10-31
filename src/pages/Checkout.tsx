@@ -4,8 +4,7 @@ import { offerTitle } from '../data/catalog'
 import { Crumbs, Icon } from '../components/ui'
 import { isEmail, isPhone, rub, uid } from '../lib/format'
 import { useAuth, useCart } from '../lib/store'
-import { createOrder, newOrderNumber, signInWithEmail, type Order, type OrderDetails } from '../lib/api'
-import { isDemo } from '../lib/supabase'
+import { createOrder, newOrderNumber, signUpOrSignIn, type Order, type OrderDetails } from '../lib/api'
 import { groupByAgency } from './Cart'
 
 type Step = 1 | 2 | 3
@@ -24,19 +23,32 @@ export default function Checkout() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [paying, setPaying] = useState(false)
   const [payError, setPayError] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPass, setShowPass] = useState(false)
+  const [authBusy, setAuthBusy] = useState(false)
 
   if (!cart.items.length && !paying) return <Navigate to="/korzina" replace />
   const groups = groupByAgency(cart.items)
   const hasRibbon = cart.items.some((x) => x.offer.typeId === 'ribbon')
 
-  const next1 = (e: FormEvent) => {
+  const next1 = async (e: FormEvent) => {
     e.preventDefault()
     const er: Record<string, string> = {}
     if (!c.name.trim()) er.name = 'Подскажите, как к вам обращаться'
     if (!isPhone(c.phone)) er.phone = 'Проверьте номер телефона'
     if (!isEmail(c.email)) er.email = 'Проверьте адрес почты'
+    if (!user && password.length < 6) er.password = 'Придумайте пароль не короче 6 символов'
     setErrors(er)
-    if (!Object.keys(er).length) setStep(2)
+    if (Object.keys(er).length) return
+    if (!user) {
+      // создаём личный кабинет сразу, чтобы заказ был привязан к нему
+      setAuthBusy(true)
+      const r = await signUpOrSignIn(c.email, password, { name: c.name.trim(), phone: c.phone.trim() })
+      setAuthBusy(false)
+      if (r.error) return setErrors({ password: r.error })
+      await refresh()
+    }
+    setStep(2)
   }
 
   const pay = async (e: FormEvent) => {
@@ -68,10 +80,9 @@ export default function Checkout() {
     }
     try {
       await createOrder(order)
-      const res = await signInWithEmail(order.customer.email, { name: order.customer.name, phone: order.customer.phone })
       await refresh()
       cart.clear()
-      nav(`/zakaz-prinyat/${order.id}`, { state: { checkEmail: res.checkEmail } })
+      nav(`/zakaz-prinyat/${order.id}`)
     } catch (err) {
       setPaying(false)
       setPayError('Не получилось сохранить заказ. Деньги не списаны. Попробуйте ещё раз или позвоните нам. ' + (err instanceof Error ? err.message : ''))
@@ -121,10 +132,20 @@ export default function Checkout() {
                   <Field label="Телефон" error={errors.phone}>
                     <input className={'input' + (errors.phone ? ' error' : '')} value={c.phone} onChange={(e) => setC({ ...c, phone: e.target.value })} inputMode="tel" autoComplete="tel" placeholder="+7" />
                   </Field>
-                  <Field label="Почта" error={errors.email} hint="Пришлём подтверждение и доступ в личный кабинет">
-                    <input className={'input' + (errors.email ? ' error' : '')} value={c.email} onChange={(e) => setC({ ...c, email: e.target.value })} type="email" autoComplete="email" />
+                  <Field label="Почта" error={errors.email} hint={user ? 'Заказ появится в вашем личном кабинете' : 'Это будет логин от личного кабинета'}>
+                    <input className={'input' + (errors.email ? ' error' : '')} value={c.email} onChange={(e) => setC({ ...c, email: e.target.value })} type="email" autoComplete="email" disabled={!!user} />
                   </Field>
                 </div>
+                {user ? (
+                  <div className="notice notice-green small"><Icon name="user" size={18} /> <span>Вы вошли в личный кабинет как <b>{user.email}</b>. Заказ сохранится в нём.</span></div>
+                ) : (
+                  <Field label="Пароль для личного кабинета" error={errors.password} hint="Придумайте пароль: с ним вы будете входить в кабинет и следить за заказом. Если кабинет на эту почту уже есть, введите пароль от него.">
+                    <div style={{ position: 'relative' }}>
+                      <input className={'input' + (errors.password ? ' error' : '')} type={showPass ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" style={{ paddingRight: 110 }} />
+                      <button type="button" className="link small" style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)' }} onClick={() => setShowPass((v) => !v)}>{showPass ? 'Скрыть' : 'Показать'}</button>
+                    </div>
+                  </Field>
+                )}
                 <div className="stack" style={{ gap: 8 }}>
                   <span className="label">Как вам удобнее общаться</span>
                   <div className="row">
@@ -133,7 +154,7 @@ export default function Checkout() {
                     ))}
                   </div>
                 </div>
-                <button className="btn btn-primary" style={{ alignSelf: 'flex-start' }}>Дальше <Icon name="arrow" size={18} /></button>
+                <button className="btn btn-primary" style={{ alignSelf: 'flex-start' }} disabled={authBusy}>{authBusy ? 'Создаём кабинет...' : <>Дальше <Icon name="arrow" size={18} /></>}</button>
               </form>
             )}
 
@@ -220,7 +241,7 @@ export default function Checkout() {
                   <button className="btn btn-primary"><Icon name="lock" size={18} /> Оплатить {rub(cart.total)}</button>
                 </div>
                 <p className="tiny muted">
-                  После оплаты мы создадим личный кабинет на {c.email || 'вашу почту'}{isDemo ? '' : ' и пришлём ссылку для входа'}. Там будут все заказы, статусы и контакты служб.
+                  Заказ появится в вашем личном кабинете ({c.email}). Там будут все статусы и контакты служб.
                 </p>
               </form>
             )}

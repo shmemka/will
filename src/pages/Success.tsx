@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { agencyById } from '../data/agencies'
 import { getOrder, type Order } from '../lib/api'
 import { rub } from '../lib/format'
@@ -10,8 +10,6 @@ import { SUPPORT_PHONE } from '../data/guide'
 
 export default function Success() {
   const { id = '' } = useParams()
-  const loc = useLocation()
-  const checkEmail = (loc.state as { checkEmail?: boolean } | null)?.checkEmail
   const [order, setOrder] = useState<Order | null>(null)
   useEffect(() => {
     getOrder(id).then(setOrder)
@@ -40,12 +38,8 @@ export default function Success() {
         </div>
 
         <div className="notice notice-green">
-          <Icon name="mail" />
-          {checkEmail ? (
-            <span>Мы отправили письмо на <b>{order?.customer.email}</b>. Нажмите на ссылку в нём или <Link to="/kabinet" className="link">введите код из письма</Link>, чтобы войти в личный кабинет. Пароль не нужен.</span>
-          ) : (
-            <span>Мы создали для вас личный кабинет на <b>{order?.customer.email}</b>. Там все заказы, статусы и контакты служб.</span>
-          )}
+          <Icon name="user" />
+          <span>Заказ сохранён в вашем личном кабинете <b>{order?.customer.email}</b>. Войти в него можно в любой момент по почте и паролю, которые вы указали.</span>
         </div>
 
         {order && (
@@ -62,7 +56,7 @@ export default function Success() {
         )}
 
         <div className="row" style={{ justifyContent: 'center' }}>
-          {!checkEmail && order && <Link to={`/kabinet/zakaz/${order.id}`} className="btn btn-primary">Открыть заказ в кабинете</Link>}
+          {order && <Link to={`/kabinet/zakaz/${order.id}`} className="btn btn-primary">Открыть заказ в кабинете</Link>}
           <Link to="/chto-delat" className="btn btn-outline">Памятка: что делать дальше</Link>
         </div>
         <p className="center small muted">Если что-то срочное, звоните в любое время: <b>{SUPPORT_PHONE}</b></p>

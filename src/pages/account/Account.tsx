@@ -1,8 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, NavLink, useNavigate, useParams } from 'react-router-dom'
 import { useAuth, useToast } from '../../lib/store'
-import { authErrorText, deletePlan, listOrders, listPlans, orderStatus, signInWithEmail, signOut, updateProfile, verifyEmailCode, type Order, type SavedPlan } from '../../lib/api'
-import { authUrlError, isDemo } from '../../lib/supabase'
+import { changePassword, deletePlan, listOrders, listPlans, orderStatus, signInWithPassword, signOut, signUpOrSignIn, updateProfile, type Order, type SavedPlan } from '../../lib/api'
 import { dateRu, dateTimeRu, isEmail, load, plural, rub, save } from '../../lib/format'
 import { agencyById } from '../../data/agencies'
 import { CHECKLIST } from '../../data/guide'
@@ -45,41 +44,23 @@ export default function Account() {
 }
 
 function Login() {
-  const pending = (() => { try { return sessionStorage.getItem('od_login_email') ?? '' } catch { return '' } })()
-  const [email, setEmail] = useState(pending)
-  const [step, setStep] = useState<'email' | 'code'>(pending && !isDemo ? 'code' : 'email')
-  const [code, setCode] = useState('')
-  const [err, setErr] = useState(authUrlError ? authErrorText(authUrlError.code || authUrlError.description) : '')
+  const [mode, setMode] = useState<'login' | 'signup'>('login')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [show, setShow] = useState(false)
+  const [err, setErr] = useState('')
   const [busy, setBusy] = useState(false)
-  const [cooldown, setCooldown] = useState(0)
   const { refresh } = useAuth()
-  useEffect(() => {
-    if (cooldown <= 0) return
-    const t = setTimeout(() => setCooldown((c) => c - 1), 1000)
-    return () => clearTimeout(t)
-  }, [cooldown])
 
-  const send = async (e?: FormEvent) => {
-    e?.preventDefault()
-    if (!isEmail(email)) return setErr('Проверьте адрес почты')
-    setErr('')
-    setBusy(true)
-    const r = await signInWithEmail(email.trim().toLowerCase())
-    setBusy(false)
-    if (r.error) return setErr(r.error)
-    if (r.checkEmail) { setStep('code'); setCooldown(60) }
-    else await refresh()
-  }
-  const verify = async (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault()
-    const t = code.replace(/\D/g, '')
-    if (t.length < 6) return setErr('Введите код из письма полностью')
+    if (!isEmail(email)) return setErr('Проверьте адрес почты')
+    if (password.length < 6) return setErr('Пароль должен быть не короче 6 символов')
     setErr('')
     setBusy(true)
-    const r = await verifyEmailCode(email.trim().toLowerCase(), t)
+    const r = mode === 'login' ? await signInWithPassword(email, password) : await signUpOrSignIn(email, password)
     setBusy(false)
     if (r.error) return setErr(r.error)
-    try { sessionStorage.removeItem('od_login_email') } catch { /* ничего */ }
     await refresh()
   }
 
@@ -89,36 +70,34 @@ function Login() {
         <div className="card stack-l" style={{ padding: 32 }}>
           <ScenePhoto id={SCENE.lilies} className="intro-photo" ratio="16 / 9" />
           <div className="stack" style={{ gap: 6 }}>
-            <h1 style={{ fontSize: 32 }}>Вход в личный кабинет</h1>
+            <h1 style={{ fontSize: 32 }}>{mode === 'login' ? 'Вход в личный кабинет' : 'Создать личный кабинет'}</h1>
             <p className="muted">
-              {step === 'email'
-                ? `Укажите почту, на которую оформляли заказ. ${isDemo ? 'В демо-режиме вход происходит сразу.' : 'Мы пришлём письмо со ссылкой и кодом для входа, пароль не нужен.'}`
-                : 'Мы отправили письмо. Нажмите на ссылку в нём или введите код из письма здесь.'}
+              {mode === 'login'
+                ? 'Введите почту и пароль, которые вы указали при оформлении заказа.'
+                : 'Кабинет создаётся автоматически при оформлении заказа. Но его можно создать и заранее, чтобы сохранять планы и памятку.'}
             </p>
           </div>
           {err && <div className="notice notice-pink small"><Icon name="info" size={18} /> <span>{err}</span></div>}
-          {step === 'email' ? (
-            <form className="stack" onSubmit={send}>
-              <input className={'input' + (err ? ' error' : '')} type="email" placeholder="Ваша почта" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" aria-label="Почта" />
-              <button className="btn btn-primary" disabled={busy}>{busy ? 'Отправляем...' : isDemo ? 'Войти' : 'Получить письмо для входа'}</button>
-            </form>
-          ) : (
-            <form className="stack" onSubmit={verify}>
-              <div className="notice notice-green small"><Icon name="mail" size={18} /> <span>Письмо отправлено на <b>{email}</b>. Если его нет, проверьте папку «Спам» и «Промоакции».</span></div>
-              <label className="field">
-                <span className="label">Код из письма</span>
-                <input className="input" inputMode="numeric" autoComplete="one-time-code" placeholder="123456" value={code} onChange={(e) => setCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 8))} style={{ fontSize: 24, letterSpacing: '0.2em' }} />
-              </label>
-              <button className="btn btn-primary" disabled={busy}>{busy ? 'Проверяем...' : 'Войти'}</button>
-              <div className="row between small">
-                <button type="button" className="link" disabled={cooldown > 0 || busy} onClick={() => send()}>
-                  {cooldown > 0 ? `Отправить ещё раз через ${cooldown} с` : 'Отправить письмо ещё раз'}
-                </button>
-                <button type="button" className="link" onClick={() => { setStep('email'); setCode(''); setErr('') }}>Другая почта</button>
+          <form className="stack" onSubmit={submit}>
+            <label className="field">
+              <span className="label">Почта</span>
+              <input className="input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
+            </label>
+            <label className="field">
+              <span className="label">Пароль</span>
+              <div style={{ position: 'relative' }}>
+                <input className="input" type={show ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} style={{ paddingRight: 110 }} />
+                <button type="button" className="link small" style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)' }} onClick={() => setShow((v) => !v)}>{show ? 'Скрыть' : 'Показать'}</button>
               </div>
-            </form>
-          )}
-          <p className="small muted">Личный кабинет создаётся автоматически после первого заказа. Если заказа ещё не было, после входа вы сможете сохранять планы и памятку.</p>
+            </label>
+            <button className="btn btn-primary" disabled={busy}>{busy ? 'Минутку...' : mode === 'login' ? 'Войти' : 'Создать кабинет'}</button>
+          </form>
+          <div className="row between small">
+            <button type="button" className="link" onClick={() => { setMode(mode === 'login' ? 'signup' : 'login'); setErr('') }}>
+              {mode === 'login' ? 'Ещё нет кабинета? Создать' : 'Уже есть кабинет? Войти'}
+            </button>
+            {mode === 'login' && <span className="muted">Забыли пароль? Позвоните нам, поможем.</span>}
+          </div>
         </div>
       </div>
     </section>
@@ -247,7 +226,29 @@ function Profile() {
         <button className="btn btn-primary" style={{ alignSelf: 'flex-start' }}>Сохранить</button>
       </form>
       <hr className="divider" />
+      <ChangePassword />
+      <hr className="divider" />
       <button className="btn btn-outline" style={{ alignSelf: 'flex-start' }} onClick={async () => { await signOut(); await refresh(); nav('/') }}>Выйти из кабинета</button>
     </div>
+  )
+}
+
+function ChangePassword() {
+  const toast = useToast()
+  const [p, setP] = useState('')
+  const [err, setErr] = useState('')
+  return (
+    <form className="stack" onSubmit={async (e) => {
+      e.preventDefault()
+      if (p.length < 6) return setErr('Пароль должен быть не короче 6 символов')
+      const r = await changePassword(p)
+      if (r.error) return setErr(r.error)
+      setErr(''); setP(''); toast('Пароль изменён')
+    }}>
+      <b>Сменить пароль</b>
+      <input className="input" type="password" placeholder="Новый пароль" value={p} onChange={(e) => setP(e.target.value)} autoComplete="new-password" aria-label="Новый пароль" />
+      {err && <span className="error-text">{err}</span>}
+      <button className="btn btn-outline" style={{ alignSelf: 'flex-start' }}>Сохранить пароль</button>
+    </form>
   )
 }

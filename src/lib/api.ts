@@ -77,32 +77,71 @@ export function onAuthChange(cb: () => void) {
 export function authErrorText(msg?: string | null): string {
   const m = (msg ?? '').toLowerCase()
   if (!m) return 'Не получилось войти. Попробуйте ещё раз или позвоните нам.'
-  if (m.includes('rate limit') || m.includes('security purposes') || m.includes('only request this')) return 'Письмо уже отправлено недавно. Подождите минуту и попробуйте снова.'
-  if (m.includes('expired') || m.includes('invalid') || m.includes('otp_expired')) return 'Ссылка или код устарели либо уже использованы. Запросите новое письмо.'
-  if (m.includes('not authorized')) return 'Почтовый сервис пока не может отправлять письма на этот адрес. Мы уже чиним это, позвоните нам, и мы поможем войти.'
-  if (m.includes('sending') || m.includes('smtp')) return 'Не получилось отправить письмо. Попробуйте позже или позвоните нам.'
+  if (m.includes('invalid login') || m.includes('invalid credentials')) return 'Неверная почта или пароль.'
+  if (m.includes('already registered') || m.includes('already been registered') || m.includes('user_already_exists')) return 'На эту почту уже есть кабинет. Введите пароль от него.'
+  if (m.includes('password should be') || m.includes('weak password') || m.includes('at least')) return 'Пароль слишком простой: нужно не меньше 6 символов.'
+  if (m.includes('email not confirmed')) return 'Почта ещё не подтверждена. Позвоните нам, и мы поможем войти.'
+  if (m.includes('rate limit') || m.includes('security purposes')) return 'Слишком много попыток. Подождите минуту и попробуйте снова.'
+  if (m.includes('invalid') && m.includes('email')) return 'Проверьте адрес почты.'
   return 'Не получилось войти: ' + msg
 }
 
-/** Вход по ссылке или коду из письма. В демо-режиме входим сразу. Возвращает true, если нужно проверить почту. */
-export async function signInWithEmail(email: string, profile?: { name?: string; phone?: string }): Promise<{ checkEmail: boolean; error?: string }> {
-  if (supabase) {
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}kabinet`, data: profile, shouldCreateUser: true },
-    })
-    try { sessionStorage.setItem('od_login_email', email) } catch { /* без хранилища тоже работает */ }
-    return { checkEmail: true, error: error ? authErrorText(error.message) : undefined }
-  }
-  save(LS.session, { email, ...profile })
-  return { checkEmail: false }
+/* В демо-режиме пароли хранятся в браузере в виде хеша, только чтобы показать сценарий */
+async function hash(text: string) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('od:' + text))
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('')
 }
 
-/** Вход по коду из письма (6 цифр) */
-export async function verifyEmailCode(email: string, token: string): Promise<{ error?: string }> {
-  if (!supabase) return {}
-  const { error } = await supabase.auth.verifyOtp({ email, token, type: 'email' })
-  return { error: error ? authErrorText(error.message) : undefined }
+/** Вход по почте и паролю */
+export async function signInWithPassword(email: string, password: string): Promise<{ error?: string }> {
+  email = email.trim().toLowerCase()
+  if (supabase) {
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    return { error: error ? authErrorText(error.message) : undefined }
+  }
+  const users = load<Record<string, string>>('od_demo_users', {})
+  if (!users[email] || users[email] !== (await hash(password))) return { error: 'Неверная почта или пароль.' }
+  save(LS.session, { ...(load<SessionUser | null>(LS.session, null) ?? {}), email })
+  return {}
+}
+
+/**
+ * Создать кабинет с паролем. Если на эту почту кабинет уже есть, пробуем войти с этим паролем.
+ * В Supabase должно быть выключено подтверждение почты (Authentication -> Providers -> Email -> Confirm email).
+ */
+export async function signUpOrSignIn(email: string, password: string, profile?: { name?: string; phone?: string }): Promise<{ error?: string; existed?: boolean }> {
+  email = email.trim().toLowerCase()
+  if (supabase) {
+    const { data, error } = await supabase.auth.signUp({ email, password, options: { data: profile } })
+    const already = (error && /already|exists/i.test(error.message)) || (!error && data.user && (data.user.identities ?? []).length === 0)
+    if (already) {
+      const r = await signInWithPassword(email, password)
+      return r.error ? { error: 'На эту почту уже есть кабинет, а пароль не подходит. Введите пароль от кабинета.', existed: true } : { existed: true }
+    }
+    if (error) return { error: authErrorText(error.message) }
+    if (!data.session) {
+      // подтверждение почты включено: пробуем войти, вдруг уже подтверждено
+      const r = await signInWithPassword(email, password)
+      if (r.error) return { error: 'Кабинет создан, но войти пока не получилось. Позвоните нам, и мы поможем.' }
+    }
+    return {}
+  }
+  const users = load<Record<string, string>>('od_demo_users', {})
+  const h = await hash(password)
+  if (users[email] && users[email] !== h) return { error: 'На эту почту уже есть кабинет, а пароль не подходит. Введите пароль от кабинета.', existed: true }
+  save('od_demo_users', { ...users, [email]: h })
+  save(LS.session, { email, ...profile })
+  return { existed: !!users[email] }
+}
+
+export async function changePassword(password: string): Promise<{ error?: string }> {
+  if (supabase) {
+    const { error } = await supabase.auth.updateUser({ password })
+    return { error: error ? authErrorText(error.message) : undefined }
+  }
+  const s = load<SessionUser | null>(LS.session, null)
+  if (s) save('od_demo_users', { ...load<Record<string, string>>('od_demo_users', {}), [s.email]: await hash(password) })
+  return {}
 }
 
 export async function updateProfile(p: { name?: string; phone?: string }) {
