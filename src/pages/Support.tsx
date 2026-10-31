@@ -4,10 +4,11 @@ import {
   buildCheckpoints, buildPackages, defaultOffer, guestsCount, packageEstimate, resolveTradition, visibleQuestions,
   TRADITION_NOTES, type Answers, type PackageId,
 } from '../data/flow'
-import { AVAILABILITY, agencyOfOffer, offerById, offersByType, typeById } from '../data/catalog'
-import ProductArt, { ScenePhoto } from '../components/ProductArt'
+import { agencyOfOffer, offerById, offersByType, typeById } from '../data/catalog'
+import { ScenePhoto } from '../components/ProductArt'
+import OfferSlider from '../components/OfferSlider'
 import { SCENE } from '../data/photos'
-import { Icon, Stars } from '../components/ui'
+import { Icon } from '../components/ui'
 import { load, plural, rub, save, uid } from '../lib/format'
 import { useCart, useToast } from '../lib/store'
 import { savePlan } from '../lib/api'
@@ -314,27 +315,7 @@ function Checkpoints({ d, up }: { d: Draft; up: (p: Partial<Draft>) => void }) {
                   </div>
                 </div>
               )}
-              <span className="small muted">Предложения служб, от доступного к дорогому. Нажмите, чтобы выбрать, и ещё раз, чтобы убрать.</span>
-              <div className="stack" style={{ gap: 10 }}>
-                {offers.map((o) => {
-                  const a = agencyOfOffer(o)
-                  const sel = d.picks[activeType] === o.id
-                  return (
-                    <button key={o.id} className={'offer-pick' + (sel ? ' selected' : '')} onClick={() => toggle(o.id)} aria-pressed={sel}>
-                      <div className="art"><ProductArt typeId={type.id} palette={o.palette} /></div>
-                      <div style={{ minWidth: 0 }}>
-                        <b style={{ display: 'block' }}>{a.name}</b>
-                        <span className="row small" style={{ gap: 6 }}><Stars value={o.rating} size={12} /> <span className="muted">{o.rating.toFixed(1)} · {AVAILABILITY[o.available].toLowerCase()}</span></span>
-                        {o.variant && <span className="small muted">Вариант: {o.variant}</span>}
-                      </div>
-                      <div className="stack" style={{ alignItems: 'flex-end', gap: 6 }}>
-                        <span className="price">{rub(o.price)}</span>
-                        <span className={'cp-mark' + (sel ? ' done' : '')}>{sel && <Icon name="check" size={14} />}</span>
-                      </div>
-                    </button>
-                  )
-                })}
-              </div>
+              <OfferSlider offers={offers} selectedId={d.picks[activeType]} onSelect={toggle} unit={type.unit} />
             </div>
 
             <div className="row between">

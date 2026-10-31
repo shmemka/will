@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { AVAILABILITY, agencyOfOffer, categoryById, offersByType, typeById } from '../data/catalog'
+import { useParams } from 'react-router-dom'
+import { categoryById, offersByType, typeById } from '../data/catalog'
 import ProductArt from '../components/ProductArt'
-import { Crumbs, Icon, Stars } from '../components/ui'
+import { Crumbs } from '../components/ui'
 import { plural, rub } from '../lib/format'
 import { useCart, useToast } from '../lib/store'
 import NotFound from './NotFound'
-import AgencyAva from '../components/AgencyAva'
+import OfferSlider from '../components/OfferSlider'
 
 export default function TypePage() {
   const { typeId = '' } = useParams()
@@ -47,33 +47,7 @@ export default function TypePage() {
             <option value="rating">Сначала с лучшей оценкой</option>
           </select>
         </div>
-        <div className="stack">
-          {offers.map((o, i) => {
-            const a = agencyOfOffer(o)
-            const inCart = cart.has(o.id)
-            return (
-              <div key={o.id} className="compare-row">
-                <AgencyAva agency={a} />
-                <div>
-                  <Link to={`/sluzhby/${a.slug}`} style={{ fontWeight: 700, textDecoration: 'none' }}>{a.name}</Link>
-                  <div className="row small" style={{ gap: 6 }}>
-                    <Stars value={o.rating} size={13} /> <span className="muted">{o.rating.toFixed(1)} · {a.okrug}</span>
-                    {i === 0 && sort === 'price' && <span className="badge badge-green">Лучшая цена</span>}
-                  </div>
-                  {o.variant && <span className="small muted">Вариант: {o.variant}</span>}
-                </div>
-                <span className="small hide-m">{AVAILABILITY[o.available]}</span>
-                <span className="price hide-m" style={{ fontSize: 19 }}>{rub(o.price)}</span>
-                <div className="row" style={{ gap: 8, justifyContent: 'flex-end' }}>
-                  <Link to={`/tovar/${o.id}`} className="btn btn-ghost btn-s">Подробнее</Link>
-                  <button className={'btn btn-s ' + (inCart ? 'btn-outline' : 'btn-primary')} onClick={() => { if (!inCart) { cart.add(o.id); toast('Добавили в корзину') } }}>
-                    {inCart ? <><Icon name="check" size={16} /> В корзине</> : <>{rub(o.price)}</>}
-                  </button>
-                </div>
-              </div>
-            )
-          })}
-        </div>
+        <OfferSlider offers={offers} inCart={(id) => cart.has(id)} onAdd={(id) => { cart.add(id); toast('Добавили в корзину') }} unit={type.unit} />
       </div>
     </section>
   )

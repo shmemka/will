@@ -73,9 +73,9 @@ export function Modal({ open, onClose, children, title }: { open: boolean; onClo
   return (
     <div className="modal-back" onClick={onClose}>
       <div className="modal" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
-        <div className="row between" style={{ marginBottom: 12 }}>
-          {title ? <h3>{title}</h3> : <span />}
-          <button className="btn btn-ghost btn-s" onClick={onClose} aria-label="Закрыть">
+        <div className="row between" style={{ marginBottom: 12, flexWrap: 'nowrap', alignItems: 'flex-start' }}>
+          {title ? <h3 style={{ minWidth: 0 }}>{title}</h3> : <span />}
+          <button className="btn btn-ghost btn-s" style={{ flex: '0 0 auto' }} onClick={onClose} aria-label="Закрыть">
             <Icon name="close" />
           </button>
         </div>
