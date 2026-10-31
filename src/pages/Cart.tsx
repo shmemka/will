@@ -6,6 +6,7 @@ import { SCENE } from '../data/photos'
 import { Crumbs, Icon } from '../components/ui'
 import { plural, rub } from '../lib/format'
 import { useCart } from '../lib/store'
+import AgencyAva from '../components/AgencyAva'
 
 export function groupByAgency<T extends { offer: { agencyId: string } }>(items: T[]) {
   const map = new Map<string, T[]>()
@@ -48,7 +49,7 @@ export default function Cart() {
               <div key={agency.id} className="card stack">
                 <div className="row between">
                   <Link to={`/sluzhby/${agency.slug}`} className="row" style={{ textDecoration: 'none', gap: 10 }}>
-                    <div className="seller-ava">{agency.short[0]}</div>
+                    <AgencyAva agency={agency} />
                     <b>{agency.name}</b>
                   </Link>
                   <span className="small muted">{rub(list.reduce((s, x) => s + x.offer.price * x.line.qty, 0))}</span>

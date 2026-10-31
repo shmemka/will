@@ -6,6 +6,7 @@ import { SUPPORT_PHONE } from '../data/guide'
 import ProductCard from '../components/ProductCard'
 import { TornEdge } from '../components/Illustrations'
 import { ScenePhoto } from '../components/ProductArt'
+import { IlloCall, IlloCatalog, IlloPartners, IlloSupport } from '../components/Illustrations'
 import { SCENE } from '../data/photos'
 import { Icon } from '../components/ui'
 
@@ -107,19 +108,19 @@ export default function Home() {
       <section className="section bg-soft rule">
         <div className="container grid grid-3">
           <Link to="/soprovozhdenie" className="service">
-            <ScenePhoto id={SCENE.support} className="service-photo" ratio="16 / 10" alt="Близкие поддерживают друг друга" />
+            <IlloSupport className="service-photo" />
             <h3>Сопровождение</h3>
             <p>Зададим несколько вопросов, предложим три варианта и поможем пройти по шагам.</p>
             <span className="btn btn-primary btn-split">Начать подбор <Icon name="arrow" /></span>
           </Link>
           <Link to="/katalog" className="service">
-            <ScenePhoto id={SCENE.catalog} className="service-photo" ratio="16 / 10" alt="Корзина живых цветов" />
+            <IlloCatalog className="service-photo" />
             <h3>Каталог</h3>
             <p>Гробы, урны, цветы, транспорт и услуги. Сравните цены у всех служб.</p>
             <span className="btn btn-primary btn-split">Перейти в каталог <Icon name="arrow" /></span>
           </Link>
           <Link to="/partneram" className="service">
-            <ScenePhoto id={SCENE.partners} className="service-photo" ratio="16 / 10" alt="Подписание документов" />
+            <IlloPartners className="service-photo" />
             <h3>Для служб</h3>
             <p>Честные предоплаченные заказы без покупки данных. Комиссия только с выполненных.</p>
             <span className="btn btn-primary btn-split">Стать партнёром <Icon name="arrow" /></span>
@@ -144,7 +145,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <ScenePhoto id={SCENE.call} className="call-photo" ratio="4 / 3" alt="Белые лилии" />
+            <IlloCall className="call-photo" />
           </div>
           <hr className="divider" style={{ margin: '72px 0' }} />
           <div className="panel center">

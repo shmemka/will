@@ -282,3 +282,9 @@ details.faq p { margin-top: 12px; color: var(--ink-2); max-width: 760px; }
 .page-head-art { width: 340px; }
 .intro-photo { width: 100%; max-width: 560px; margin: 0 auto; border-radius: var(--radius-m); }
 .service > .btn { width: calc(100% - 48px); }
+.seller-ava.has-logo { background: var(--white) !important; box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; padding: 6px; }
+.seller-ava.has-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.agency-head .seller-ava.has-logo { padding: 10px; box-shadow: var(--shadow); }
+.illo { width: 100%; overflow: hidden; border-radius: var(--radius-m); }
+.illo svg { display: block; width: 100%; height: 100%; }
+.service .illo { border-radius: 0; }

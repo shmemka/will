@@ -8,6 +8,7 @@ import { localReviews, type UserReview } from '../lib/api'
 import { plural, rub } from '../lib/format'
 import { Reviews } from './Product'
 import NotFound from './NotFound'
+import AgencyAva from '../components/AgencyAva'
 
 export default function AgencyPage() {
   const { slug = '' } = useParams()
@@ -27,7 +28,7 @@ export default function AgencyPage() {
       <div className="container">
         <Crumbs items={[{ to: '/', label: 'Главная' }, { to: '/sluzhby', label: 'Службы' }, { label: a.short }]} />
         <div className="agency-head">
-          <div className="seller-ava">{a.short[0]}</div>
+          <AgencyAva agency={a} />
           <div className="stack" style={{ gap: 8 }}>
             <h1 style={{ fontSize: 'clamp(26px,3.4vw,40px)' }}>{a.name}</h1>
             <div className="row small">

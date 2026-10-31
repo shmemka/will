@@ -6,6 +6,7 @@ import { Crumbs, Icon, Stars } from '../components/ui'
 import { plural, rub } from '../lib/format'
 import { useCart, useToast } from '../lib/store'
 import NotFound from './NotFound'
+import AgencyAva from '../components/AgencyAva'
 
 export default function TypePage() {
   const { typeId = '' } = useParams()
@@ -52,7 +53,7 @@ export default function TypePage() {
             const inCart = cart.has(o.id)
             return (
               <div key={o.id} className="compare-row">
-                <div className="seller-ava">{a.short[0]}</div>
+                <AgencyAva agency={a} />
                 <div>
                   <Link to={`/sluzhby/${a.slug}`} style={{ fontWeight: 700, textDecoration: 'none' }}>{a.name}</Link>
                   <div className="row small" style={{ gap: 6 }}>

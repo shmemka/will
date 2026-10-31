@@ -7,6 +7,7 @@ import { dateRu, dateTimeRu, rub } from '../../lib/format'
 import { useAuth, useToast } from '../../lib/store'
 import { isDemo } from '../../lib/supabase'
 import { Crumbs, Icon } from '../../components/ui'
+import AgencyAva from '../../components/AgencyAva'
 
 const FLOW: PartStatus[] = ['pending', 'confirmed', 'in_progress', 'done']
 
@@ -55,7 +56,7 @@ export default function OrderPage() {
                 <div key={p.id} className="card stack-l">
                   <div className="row between">
                     <Link to={`/sluzhby/${a.slug}`} className="row" style={{ textDecoration: 'none', gap: 10 }}>
-                      <div className="seller-ava">{a.short[0]}</div>
+                      <AgencyAva agency={a} />
                       <div><b style={{ display: 'block' }}>{a.name}</b><span className="small muted">{a.phones[0].number}</span></div>
                     </Link>
                     <span className={'badge ' + PART_STATUS[p.status].tone}>{PART_STATUS[p.status].label}</span>

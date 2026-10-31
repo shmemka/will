@@ -7,6 +7,7 @@ import PageHead from '../components/PageHead'
 import { ScenePhoto } from '../components/ProductArt'
 import { SCENE } from '../data/photos'
 import { plural } from '../lib/format'
+import AgencyAva from '../components/AgencyAva'
 
 const OKRUGS = ['ЦАО', 'САО', 'СВАО', 'ВАО', 'ЮВАО', 'ЮАО', 'ЮЗАО', 'ЗАО', 'СЗАО']
 
@@ -32,7 +33,7 @@ export default function Agencies() {
             return (
               <Link key={a.id} to={`/sluzhby/${a.slug}`} className="card card-link stack">
                 <div className="row" style={{ gap: 14 }}>
-                  <div className="seller-ava">{a.short[0]}</div>
+                  <AgencyAva agency={a} />
                   <div>
                     <h4>{a.name}</h4>
                     <div className="row small" style={{ gap: 6 }}><Stars value={a.rating} size={13} /> <span className="muted">{a.rating.toFixed(1)}</span></div>

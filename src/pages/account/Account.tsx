@@ -7,8 +7,7 @@ import { agencyById } from '../../data/agencies'
 import { CHECKLIST } from '../../data/guide'
 import { offerById, offerTitle } from '../../data/catalog'
 import { Icon } from '../../components/ui'
-import { ScenePhoto } from '../../components/ProductArt'
-import { SCENE } from '../../data/photos'
+import { IlloLogin } from '../../components/Illustrations'
 
 export default function Account() {
   const { user, ready } = useAuth()
@@ -68,7 +67,7 @@ function Login() {
     <section className="section">
       <div className="container" style={{ maxWidth: 560 }}>
         <div className="card stack-l" style={{ padding: 32 }}>
-          <ScenePhoto id={SCENE.lilies} className="intro-photo" ratio="16 / 9" />
+          <IlloLogin className="intro-photo" />
           <div className="stack" style={{ gap: 6 }}>
             <h1 style={{ fontSize: 32 }}>{mode === 'login' ? 'Вход в личный кабинет' : 'Создать личный кабинет'}</h1>
             <p className="muted">

@@ -6,6 +6,7 @@ import { localOrdersForAgency, PART_STATUS, updatePartStatus, type Order, type P
 import { dateRu, dateTimeRu, load, rub, save } from '../../lib/format'
 import { useToast } from '../../lib/store'
 import { Crumbs, Icon } from '../../components/ui'
+import AgencyAva from '../../components/AgencyAva'
 
 const COMMISSION = 0.15
 const NEXT: Partial<Record<PartStatus, { to: PartStatus; label: string }>> = {
@@ -64,7 +65,7 @@ export default function PartnerCabinet() {
         <Crumbs items={[{ to: '/partneram', label: 'Для служб' }, { label: 'Кабинет службы' }]} />
         <div className="row between" style={{ marginBottom: 20 }}>
           <div className="row" style={{ gap: 14 }}>
-            <div className="seller-ava">{a.short[0]}</div>
+            <AgencyAva agency={a} />
             <div>
               <h1 style={{ fontSize: 'clamp(24px,3vw,34px)' }}>{a.name}</h1>
               <span className="small muted">Демо-кабинет службы · заказы из этого браузера</span>
