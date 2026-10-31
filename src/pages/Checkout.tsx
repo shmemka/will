@@ -1,3 +1,4 @@
+import { DatePicker, TimePicker } from '../components/controls'
 import { useState, type FormEvent } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { offerTitle } from '../data/catalog'
@@ -168,11 +169,11 @@ export default function Checkout() {
                   <input className="input" value={det.deceasedName ?? ''} onChange={(e) => setDet({ ...det, deceasedName: e.target.value })} placeholder="Фамилия, имя, отчество" />
                 </Field>
                 <div className="grid grid-2" style={{ gap: 16 }}>
-                  <Field label="Желаемая дата прощания">
-                    <input className="input" type="date" value={det.date ?? ''} onChange={(e) => setDet({ ...det, date: e.target.value })} />
+                  <Field div label="Желаемая дата прощания">
+                    <DatePicker value={det.date ?? ''} onChange={(v) => setDet({ ...det, date: v })} ariaLabel="Желаемая дата прощания" />
                   </Field>
-                  <Field label="Время">
-                    <input className="input" type="time" value={det.time ?? ''} onChange={(e) => setDet({ ...det, time: e.target.value })} />
+                  <Field div label="Время">
+                    <TimePicker value={det.time ?? ''} onChange={(v) => setDet({ ...det, time: v })} ariaLabel="Время прощания" />
                   </Field>
                 </div>
                 <Field label="Где сейчас находится ваш близкий" hint="Морг, больница или адрес">
@@ -272,12 +273,14 @@ export default function Checkout() {
   )
 }
 
-function Field({ label, hint, error, children }: { label: string; hint?: string; error?: string; children: React.ReactNode }) {
-  return (
-    <label className="field">
+function Field({ label, hint, error, children, div }: { label: string; hint?: string; error?: string; children: React.ReactNode; div?: boolean }) {
+  const inner = (
+    <>
       <span className="label">{label}</span>
       {children}
       {error ? <span className="error-text">{error}</span> : hint ? <span className="hint">{hint}</span> : null}
-    </label>
+    </>
   )
+  // Свои выпадающие списки нельзя класть в <label>: клик внутри списка снова открывал бы его
+  return div ? <div className="field">{inner}</div> : <label className="field">{inner}</label>
 }

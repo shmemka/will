@@ -6,6 +6,7 @@ import { SUPPORT_PHONE } from '../data/guide'
 import ProductCard from '../components/ProductCard'
 import { TornEdge } from '../components/Illustrations'
 import { ScenePhoto } from '../components/ProductArt'
+import { Dropdown } from '../components/controls'
 import { IlloCall, IlloCatalog, IlloPartners, IlloSupport } from '../components/Illustrations'
 import { SCENE } from '../data/photos'
 import { Icon } from '../components/ui'
@@ -60,15 +61,12 @@ export default function Home() {
               <h2>Всё необходимое для прощания</h2>
               <p className="lead">{OFFERS.length} товаров и услуг от {AGENCIES.length} служб Москвы. Цена у каждого предложения фиксированная.</p>
             </div>
-            <label className="row small" style={{ gap: 8 }}>
-              <span className="muted">Сортировка</span>
-              <select className="select" style={{ width: 'auto', minHeight: 44 }} value={sort} onChange={(e) => setSort(e.target.value as SortKey)}>
-                <option value="popular">Сначала популярные</option>
-                <option value="cheap">Сначала дешевле</option>
-                <option value="expensive">Сначала дороже</option>
-                <option value="rating">По оценке</option>
-              </select>
-            </label>
+            <Dropdown align="right" label="Сначала" value={sort} onChange={setSort} ariaLabel="Сортировка" options={[
+              { value: 'popular', label: 'популярные' },
+              { value: 'cheap', label: 'дешевле' },
+              { value: 'expensive', label: 'дороже' },
+              { value: 'rating', label: 'с лучшей оценкой' },
+            ]} />
           </div>
           <div className="chips" role="tablist" aria-label="Категории">
             <button role="tab" aria-selected={cat === 'all'} className={'chip' + (cat === 'all' ? ' active' : '')} onClick={() => { setCat('all'); setLimit(12) }}>

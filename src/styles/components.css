@@ -374,3 +374,67 @@ input, select, textarea { transition: border-color .3s ease, box-shadow .3s ease
   .rv { opacity: 1; transform: none; }
 }
 @media (max-width: 560px) { .chips .chip { padding-left: 10px; padding-right: 10px; } }
+
+/* ---------- Свои элементы форм ---------- */
+.dd { position: relative; display: inline-flex; min-width: 0; }
+.dd-block { display: flex; width: 100%; }
+.dd-btn { display: inline-flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); font: inherit; font-size: 15px; color: var(--ink); cursor: pointer; text-align: left; transition: border-color .3s ease, box-shadow .3s ease, background .3s ease; }
+.dd-l .dd-btn { min-height: 54px; padding: 12px 16px; font-size: 16px; border-color: var(--ink-3); }
+.dd-btn:hover { border-color: var(--ink-3); }
+.dd.open .dd-btn, .dd-btn:focus-visible { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); outline: none; }
+.dd-label { color: var(--ink-2); white-space: nowrap; }
+.dd-value { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+.dd-l .dd-value { font-weight: 500; }
+.dd-ph { color: var(--ink-3); font-weight: 500; }
+.dd-chev { margin-left: auto; color: var(--ink-2); transition: transform .35s var(--ease-soft); }
+.dd.open .dd-chev { transform: rotate(180deg); }
+.dd-pop { position: absolute; top: calc(100% + 6px); left: 0; z-index: 80; background: var(--white); border-radius: var(--radius-m); box-shadow: 0 12px 32px rgba(0,0,0,.14), 0 0 0 1px rgba(0,0,0,.04); animation: popIn .28s var(--ease-soft) both; transform-origin: top left; }
+.dd-right { left: auto; right: 0; transform-origin: top right; }
+@keyframes popIn { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: none; } }
+.dd-list { list-style: none; margin: 0; padding: 6px; min-width: 100%; width: max-content; max-width: min(360px, 90vw); max-height: 320px; overflow: auto; }
+.dd-list li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 12px; border-radius: var(--radius); cursor: pointer; font-size: 15px; transition: background .2s ease; }
+.dd-list li.hi { background: var(--line-3); }
+.dd-list li.sel { font-weight: 700; }
+.dd-list li svg { color: var(--ink); flex: 0 0 auto; }
+.dd-hint { display: block; font-size: 13px; color: var(--ink-2); font-weight: 500; }
+.dd-block .dd-list { width: 100%; max-width: none; }
+
+/* Переключатель */
+.switch { display: inline-flex; align-items: center; gap: 10px; background: none; border: 0; padding: 4px 0; font: inherit; font-size: 15px; color: var(--ink); cursor: pointer; }
+.switch-track { width: 40px; height: 24px; border-radius: 99px; background: var(--line); position: relative; flex: 0 0 auto; transition: background .35s ease; }
+.switch-knob { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .4s var(--ease-soft); }
+.switch.on .switch-track { background: var(--ink); }
+.switch.on .switch-knob { transform: translateX(16px); }
+.switch:focus-visible .switch-track { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* Календарь */
+.cal { padding: 14px; width: 300px; display: flex; flex-direction: column; gap: 8px; }
+.cal-head { display: flex; align-items: center; justify-content: space-between; }
+.cal-nav { width: 34px; height: 34px; border-radius: 50%; border: 0; background: none; display: grid; place-items: center; cursor: pointer; color: var(--ink); transition: background .2s; }
+.cal-nav:hover:not(:disabled) { background: var(--line-3); }
+.cal-nav:disabled { opacity: .3; cursor: default; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.cal-wd { text-align: center; font-size: 12px; color: var(--ink-3); padding: 4px 0; }
+.cal-day { aspect-ratio: 1; border: 0; background: none; border-radius: 50%; font: inherit; font-size: 14px; cursor: pointer; color: var(--ink); transition: background .2s; }
+.cal-day:hover:not(:disabled) { background: var(--yellow-pale); }
+.cal-day.today { box-shadow: inset 0 0 0 1px var(--ink-3); }
+.cal-day.sel { background: var(--ink); color: var(--white); }
+.cal-day:disabled { color: var(--line); cursor: default; }
+.cal .link { align-self: flex-start; }
+
+/* Флажки */
+.checkbox input[type='checkbox'], input[type='checkbox'] { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; margin: 1px 0 0; border: 1.5px solid var(--ink-3); border-radius: 5px; background: var(--white) center / 14px no-repeat; cursor: pointer; flex: 0 0 auto; transition: background-color .25s ease, border-color .25s ease; }
+input[type='checkbox']:hover { border-color: var(--ink); }
+input[type='checkbox']:checked { background-color: var(--ink); border-color: var(--ink); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E"); }
+input[type='checkbox']:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* Каталог: панель управления */
+.cat-bar { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
+.cat-bar-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.seg { display: inline-flex; padding: 4px; background: var(--line-3); border-radius: 10px; gap: 2px; position: relative; }
+.seg button { border: 0; background: none; padding: 9px 16px; border-radius: 7px; font: inherit; font-size: 15px; font-weight: 600; color: var(--ink-2); cursor: pointer; transition: background .35s ease, color .3s ease, box-shadow .35s ease; }
+.seg button.on { background: var(--white); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+.cat-filters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.cat-meta { display: flex; align-items: center; gap: 14px; font-size: 14px; color: var(--ink-2); }
+@media (max-width: 560px) { .cat-filters .dd { flex: 1 1 100%; } .cat-filters .dd .dd-btn { width: 100%; } }
+.dd-up { top: auto; bottom: calc(100% + 6px); transform-origin: bottom left; }

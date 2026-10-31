@@ -1,3 +1,4 @@
+import { Dropdown } from '../../components/controls'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AGENCIES, agencyById } from '../../data/agencies'
@@ -36,10 +37,7 @@ export default function PartnerCabinet() {
             <span className="badge badge-blue" style={{ alignSelf: 'flex-start' }}>Демо-кабинет службы</span>
             <h1 style={{ fontSize: 30 }}>Вход для ритуальных служб</h1>
             <p className="muted">В рабочей версии служба входит по своей почте. В демо можно выбрать любую службу и посмотреть, как к ней приходят заказы.</p>
-            <select className="select" defaultValue="" onChange={(e) => setAgencyId(e.target.value)} aria-label="Служба">
-              <option value="" disabled>Выберите службу</option>
-              {AGENCIES.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
-            </select>
+            <Dropdown block size="l" value="" onChange={setAgencyId} placeholder="Выберите службу" ariaLabel="Служба" options={AGENCIES.map((a) => ({ value: a.id, label: a.name }))} />
             <Link to="/partneram" className="link small">Как подключиться к От Души</Link>
           </div>
         </div>

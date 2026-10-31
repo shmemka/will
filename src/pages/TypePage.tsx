@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { categoryById, offersByType, typeById } from '../data/catalog'
 import ProductArt from '../components/ProductArt'
 import { Crumbs } from '../components/ui'
+import { Dropdown } from '../components/controls'
 import { plural, rub } from '../lib/format'
 import { useCart, useToast } from '../lib/store'
 import NotFound from './NotFound'
@@ -42,10 +43,10 @@ export default function TypePage() {
             <h2 style={{ fontSize: 28 }}>Выберите службу</h2>
             <p className="muted">Цены фиксированные. Разница обычно в материалах, сроках и районе работы.</p>
           </div>
-          <select className="select" style={{ width: 'auto' }} value={sort} onChange={(e) => setSort(e.target.value as 'price')} aria-label="Сортировка">
-            <option value="price">Сначала дешевле</option>
-            <option value="rating">Сначала с лучшей оценкой</option>
-          </select>
+          <Dropdown align="right" label="Сначала" value={sort} onChange={setSort} ariaLabel="Сортировка" options={[
+            { value: 'price', label: 'дешевле' },
+            { value: 'rating', label: 'с лучшей оценкой' },
+          ]} />
         </div>
         <OfferSlider offers={offers} inCart={(id) => cart.has(id)} onAdd={(id) => { cart.add(id); toast('Добавили в корзину') }} unit={type.unit} />
       </div>

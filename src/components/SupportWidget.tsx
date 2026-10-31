@@ -1,3 +1,4 @@
+import { Dropdown } from './controls'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon } from './ui'
@@ -118,12 +119,7 @@ export default function SupportWidget() {
                   <input className="input" placeholder="Как к вам обращаться" value={cb.name} onChange={(e) => setCb({ ...cb, name: e.target.value })} />
                   <input className={'input' + (err ? ' error' : '')} placeholder="Телефон" inputMode="tel" value={cb.phone} onChange={(e) => setCb({ ...cb, phone: e.target.value })} />
                   {err && <span className="error-text">{err}</span>}
-                  <select className="select" value={cb.when} onChange={(e) => setCb({ ...cb, when: e.target.value })} aria-label="Когда перезвонить">
-                    <option>Как можно скорее</option>
-                    <option>Через час</option>
-                    <option>Сегодня вечером</option>
-                    <option>Завтра утром</option>
-                  </select>
+                  <Dropdown block up size="l" value={cb.when} onChange={(v) => setCb({ ...cb, when: v })} ariaLabel="Когда перезвонить" options={['Как можно скорее', 'Через час', 'Сегодня вечером', 'Завтра утром'].map((v) => ({ value: v, label: v }))} />
                   <button className="btn btn-dark">Жду звонка</button>
                 </form>
               )}

@@ -1,3 +1,4 @@
+import { Switch } from '../components/controls'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AGENCIES } from '../data/agencies'
@@ -23,7 +24,7 @@ export default function Agencies() {
             <button className={'chip' + (okrug === 'all' ? ' active' : '')} onClick={() => setOkrug('all')}>Все округа</button>
             {OKRUGS.map((o) => <button key={o} className={'chip' + (okrug === o ? ' active' : '')} onClick={() => setOkrug(o)}>{o}</button>)}
           </div>
-          <label className="checkbox"><input type="checkbox" checked={only24} onChange={(e) => setOnly24(e.target.checked)} /> Круглосуточно</label>
+          <Switch checked={only24} onChange={setOnly24}>Круглосуточно</Switch>
         </div>
         <div className="grid grid-3">
           {list.map((a) => {

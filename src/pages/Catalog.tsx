@@ -6,6 +6,7 @@ import ProductArt from '../components/ProductArt'
 import ProductCard from '../components/ProductCard'
 import { Icon } from '../components/ui'
 import PageHead from '../components/PageHead'
+import { Dropdown, Switch } from '../components/controls'
 import { rub, plural } from '../lib/format'
 import { sortOffers, type SortKey } from './Home'
 
@@ -56,9 +57,42 @@ export default function Catalog() {
     />
     <section className="section-s" style={{ paddingTop: 16 }}>
       <div className="container">
-        <div className="tabs">
-          <button className={'tab' + (view === 'types' ? ' active' : '')} onClick={() => set('view', null)}>Основные товары</button>
-          <button className={'tab' + (view === 'offers' ? ' active' : '')} onClick={() => set('view', 'offers')}>Все предложения</button>
+        <div className="cat-bar">
+          <div className="cat-bar-top">
+            <div className="seg" role="tablist" aria-label="Как показать каталог">
+              <button role="tab" aria-selected={view === 'types'} className={view === 'types' ? 'on' : ''} onClick={() => set('view', null)}>Товары</button>
+              <button role="tab" aria-selected={view === 'offers'} className={view === 'offers' ? 'on' : ''} onClick={() => set('view', 'offers')}>Предложения служб</button>
+            </div>
+            {view === 'offers' && (
+              <Dropdown align="right" label="Сначала" value={sort} onChange={setSort} ariaLabel="Сортировка" options={[
+                { value: 'popular', label: 'популярные' },
+                { value: 'cheap', label: 'дешевле' },
+                { value: 'expensive', label: 'дороже' },
+                { value: 'rating', label: 'с лучшей оценкой' },
+              ]} />
+            )}
+          </div>
+          <p className="small muted" style={{ margin: 0 }}>
+            {view === 'types'
+              ? 'Выберите товар, и мы покажем, у каких служб он есть и сколько стоит.'
+              : 'Все варианты от всех служб сразу. Отберите по службе, цене или сроку.'}
+          </p>
+          <div className="cat-filters">
+            <Dropdown label="Категория" value={cat} onChange={(v) => set('cat', v)} ariaLabel="Категория" options={[{ value: 'all', label: 'Все' }, ...CATEGORIES.map((c) => ({ value: c.id, label: c.name }))]} />
+            {view === 'offers' && (
+              <>
+                <Dropdown label="Служба" value={agency} onChange={setAgency} ariaLabel="Служба" options={[{ value: 'all', label: 'Любая' }, ...AGENCIES.map((a) => ({ value: a.id, label: a.short }))]} />
+                <Dropdown label="Цена" value={maxPrice} onChange={setMaxPrice} ariaLabel="Цена" options={[
+                  { value: '', label: 'любая' },
+                  ...[1000, 3000, 5000, 10000, 20000, 50000].map((n) => ({ value: String(n), label: 'до ' + rub(n) })),
+                ]} />
+                <Switch checked={today} onChange={setToday}>Можно сегодня</Switch>
+              </>
+            )}
+            {(cat !== 'all' || agency !== 'all' || maxPrice || today) && (
+              <button className="link small" style={{ fontSize: 14 }} onClick={() => { set('cat', null); setAgency('all'); setMaxPrice(''); setToday(false) }}>Сбросить</button>
+            )}
+          </div>
         </div>
 
         {q && (
@@ -69,15 +103,8 @@ export default function Catalog() {
           </div>
         )}
 
-        <div className="chips">
-          <button className={'chip' + (cat === 'all' ? ' active' : '')} onClick={() => set('cat', null)}>Все</button>
-          {CATEGORIES.map((c) => (
-            <button key={c.id} className={'chip' + (cat === c.id ? ' active' : '')} onClick={() => set('cat', c.id)}>{c.name}</button>
-          ))}
-        </div>
-
         {view === 'types' ? (
-          <div className="stack-l" style={{ marginTop: 32, gap: 48 }}>
+          <div className="stack-l" style={{ marginTop: 8, gap: 48 }}>
             {grouped.length === 0 && <Empty />}
             {grouped.map(({ c, list }) => (
               <div key={c.id}>
@@ -110,20 +137,6 @@ export default function Catalog() {
           </div>
         ) : (
           <>
-            <div className="row" style={{ margin: '14px 0 18px' }}>
-              <select className="select" style={{ width: 'auto' }} value={agency} onChange={(e) => setAgency(e.target.value)} aria-label="Служба">
-                <option value="all">Все службы</option>
-                {AGENCIES.map((a) => <option key={a.id} value={a.id}>{a.short}</option>)}
-              </select>
-              <input className="input" style={{ width: 160 }} inputMode="numeric" placeholder="Цена до, ₽" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value.replace(/\D/g, ''))} aria-label="Максимальная цена" />
-              <label className="checkbox"><input type="checkbox" checked={today} onChange={(e) => setToday(e.target.checked)} /> Можно сегодня</label>
-              <select className="select" style={{ width: 'auto', marginLeft: 'auto' }} value={sort} onChange={(e) => setSort(e.target.value as SortKey)} aria-label="Сортировка">
-                <option value="popular">Сначала популярные</option>
-                <option value="cheap">Сначала дешевле</option>
-                <option value="expensive">Сначала дороже</option>
-                <option value="rating">По оценке</option>
-              </select>
-            </div>
             <p className="small muted" style={{ marginBottom: 12 }}>{offers.length} {plural(offers.length, 'предложение', 'предложения', 'предложений')}</p>
             {offers.length === 0 ? <Empty /> : (
               <div className="products-grid">{offers.map((o) => <ProductCard key={o.id} offer={o} />)}</div>
