@@ -1,8 +1,7 @@
 name: Публикация на GitHub Pages
 
+# Запускается вручную. Сейчас сайт публикуется командой npm run deploy в ветку gh-pages.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

@@ -80,7 +80,13 @@ scripts/       generate-seed.ts
 
 ## Деплой
 
-**GitHub Pages.** Сайт собирается и публикуется автоматически при каждом пуше в `main` (`.github/workflows/deploy.yml`) по адресу https://shmemka.github.io/will/. В настройках репозитория Settings -> Pages -> Source должно стоять **GitHub Actions**. В Supabase (Authentication -> URL Configuration) добавьте `https://shmemka.github.io/will/kabinet` в Redirect URLs.
+**GitHub Pages.** Сайт открывается по адресу https://shmemka.github.io/will/ и публикуется из ветки `gh-pages`. Чтобы выложить новую версию, выполните:
+
+```bash
+npm run deploy
+```
+
+Команда соберёт сайт и отправит его в ветку `gh-pages`, через 1-2 минуты изменения появятся на сайте. В настройках репозитория Settings -> Pages -> Source должно стоять **Deploy from a branch**, ветка `gh-pages`, папка `/ (root)`. В Supabase (Authentication -> URL Configuration) добавьте `https://shmemka.github.io/will/kabinet` в Redirect URLs.
 
 **Другие хостинги.** 
 Подходит любой статический хостинг. Для Vercel и Netlify уже есть правила для SPA (`vercel.json`, `public/_redirects`). Не забудьте указать переменные `VITE_SUPABASE_URL` и `VITE_SUPABASE_ANON_KEY` в настройках хостинга.
