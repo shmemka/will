@@ -1,7 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth, useCart } from '../lib/store'
-import { isDemo } from '../lib/supabase'
 import { Icon } from './ui'
 import SupportWidget from './SupportWidget'
 import { SUPPORT_PHONE } from '../data/guide'
@@ -128,7 +127,7 @@ function Footer() {
           <Link to="/dokumenty/terms">Условия сервиса</Link>
         </div>
         <div className="footer-bottom" style={{ borderTop: 0, marginTop: 8, paddingTop: 0 }}>
-          <p>© 2026 От Души · Сервис помогает выбрать товары и услуги ритуальных служб Москвы. Услуги оказывают сами службы. Информация на сайте не является юридической консультацией.</p>
+          <p>© 2026 От Души · Сервис помогает выбрать товары и услуги ритуальных служб Москвы. Услуги оказывают сами службы. Цены, ассортимент и отзывы служб пока указаны для примера. Информация на сайте не является юридической консультацией.</p>
         </div>
       </div>
     </footer>
@@ -143,9 +142,6 @@ export default function Layout() {
   return (
     <>
       <a href="#main" className="sr-only">Перейти к содержимому</a>
-      <div className="demo-bar">
-        <b>{isDemo ? 'Демо-версия.' : 'Тестовый запуск.'}</b> Товары, цены и отзывы примерные, оплата не списывает деньги.
-      </div>
       <Header />
       <main id="main">
         <Outlet />

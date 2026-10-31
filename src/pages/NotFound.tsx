@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'
-import { CandleArt } from '../components/Illustrations'
+import { ScenePhoto } from '../components/ProductArt'
+import { SCENE } from '../data/photos'
 
 export default function NotFound() {
   return (
     <section className="section">
       <div className="container empty stack" style={{ alignItems: 'center' }}>
-        <CandleArt className="intro-art" />
+        <ScenePhoto id={SCENE.candles} className="intro-photo" ratio="16 / 9" />
         <h2>Такой страницы нет</h2>
         <p className="muted">Возможно, ссылка устарела. Давайте вернёмся туда, где мы сможем помочь.</p>
         <div className="row" style={{ justifyContent: 'center' }}>

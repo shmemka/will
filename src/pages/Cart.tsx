@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { agencyById } from '../data/agencies'
 import { offerTitle, typeById } from '../data/catalog'
-import ProductArt from '../components/ProductArt'
-import { CatalogArt } from '../components/Illustrations'
+import ProductArt, { ScenePhoto } from '../components/ProductArt'
+import { SCENE } from '../data/photos'
 import { Crumbs, Icon } from '../components/ui'
 import { plural, rub } from '../lib/format'
 import { useCart } from '../lib/store'
@@ -22,7 +22,7 @@ export default function Cart() {
     return (
       <section className="section">
         <div className="container empty stack" style={{ alignItems: 'center' }}>
-          <CatalogArt className="intro-art" />
+          <ScenePhoto id={SCENE.catalog} className="intro-photo" ratio="16 / 9" />
           <h1 style={{ fontSize: 34 }}>Корзина пока пустая</h1>
           <p className="muted" style={{ maxWidth: 480 }}>Можно выбрать товары в каталоге или пройти полное сопровождение: мы поможем собрать всё по шагам.</p>
           <div className="row" style={{ justifyContent: 'center' }}>
@@ -57,7 +57,7 @@ export default function Cart() {
                   const t = typeById(offer.typeId)!
                   return (
                     <div key={offer.id} className="offer-pick" style={{ cursor: 'default', gridTemplateColumns: '84px minmax(0,1fr) auto' }}>
-                      <Link to={`/tovar/${offer.id}`} className="art"><ProductArt kind={t.art} palette={offer.palette} /></Link>
+                      <Link to={`/tovar/${offer.id}`} className="art"><ProductArt typeId={t.id} palette={offer.palette} /></Link>
                       <div className="stack" style={{ gap: 6, minWidth: 0 }}>
                         <Link to={`/tovar/${offer.id}`} style={{ fontWeight: 700, textDecoration: 'none' }}>{offerTitle(offer)}</Link>
                         <div className="row" style={{ gap: 10 }}>

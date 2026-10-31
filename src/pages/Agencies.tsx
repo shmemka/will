@@ -4,7 +4,8 @@ import { AGENCIES } from '../data/agencies'
 import { offersByAgency } from '../data/catalog'
 import { Icon, Stars } from '../components/ui'
 import PageHead from '../components/PageHead'
-import { HandshakeArt } from '../components/Illustrations'
+import { ScenePhoto } from '../components/ProductArt'
+import { SCENE } from '../data/photos'
 import { plural } from '../lib/format'
 
 const OKRUGS = ['ЦАО', 'САО', 'СВАО', 'ВАО', 'ЮВАО', 'ЮАО', 'ЮЗАО', 'ЗАО', 'СЗАО']
@@ -15,7 +16,7 @@ export default function Agencies() {
   const list = useMemo(() => AGENCIES.filter((a) => (okrug === 'all' || a.okrug === okrug) && (!only24 || a.dispatcher24)), [okrug, only24])
   return (
     <>
-    <PageHead crumbs={[{ to: '/', label: 'Главная' }, { label: 'Службы' }]} title="Ритуальные службы Москвы" lead="Специализированные службы по вопросам похоронного дела. У каждой своя страница с товарами, контактами и отзывами." art={<HandshakeArt />} />
+    <PageHead crumbs={[{ to: '/', label: 'Главная' }, { label: 'Службы' }]} title="Ритуальные службы Москвы" lead="Специализированные службы по вопросам похоронного дела. У каждой своя страница с товарами, контактами и отзывами." art={<ScenePhoto id={SCENE.agencies} ratio="4 / 3" />} />
     <section className="section-s" style={{ paddingTop: 16 }}>
       <div className="container">
         <div className="row" style={{ marginBottom: 20 }}>

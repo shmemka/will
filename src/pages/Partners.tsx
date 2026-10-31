@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { HandshakeArt } from '../components/Illustrations'
+import { ScenePhoto } from '../components/ProductArt'
+import { SCENE } from '../data/photos'
 import { Icon } from '../components/ui'
 import PageHead from '../components/PageHead'
 import { savePartnerApplication } from '../lib/api'
@@ -29,7 +30,7 @@ export default function Partners() {
         crumbs={[{ to: '/', label: 'Главная' }, { label: 'Для ритуальных служб' }]}
         title="Честные заказы без покупки данных"
         lead="Семьи сами выбирают ваши товары и услуги на сайте и оплачивают заказ заранее. Вы получаете готовый заказ с деталями и платите прозрачную комиссию только с выполненных заказов."
-        art={<HandshakeArt />}
+        art={<ScenePhoto id={SCENE.partners} ratio="4 / 3" />}
       >
         <div className="row" style={{ marginTop: 24 }}>
           <a href="#form" className="btn btn-dark">Оставить заявку</a>

@@ -24,7 +24,7 @@ export default function TypePage() {
       <div className="container">
         <Crumbs items={[{ to: '/', label: 'Главная' }, { to: '/katalog', label: 'Каталог' }, { to: `/katalog?cat=${cat.id}`, label: cat.name }, { label: type.name }]} />
         <div className="grid grid-2" style={{ alignItems: 'center', gap: 32 }}>
-          <div className="gallery-main"><ProductArt kind={type.art} palette={1} label={type.name} /></div>
+          <div className="gallery-main"><ProductArt typeId={type.id} palette={1} label={type.name} /></div>
           <div className="stack-l">
             <h1 style={{ fontSize: 'clamp(28px,3.6vw,42px)' }}>{type.name}</h1>
             <p className="lead">{type.desc}</p>

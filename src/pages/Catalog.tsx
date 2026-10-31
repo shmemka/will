@@ -2,11 +2,11 @@ import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { CATEGORIES, OFFERS, TYPES, categoryById, minPrice, offersByType, typeById } from '../data/catalog'
 import { AGENCIES } from '../data/agencies'
-import ProductArt from '../components/ProductArt'
+import ProductArt, { ScenePhoto } from '../components/ProductArt'
 import ProductCard from '../components/ProductCard'
 import { Icon } from '../components/ui'
 import PageHead from '../components/PageHead'
-import { CatalogArt } from '../components/Illustrations'
+import { SCENE } from '../data/photos'
 import { rub, plural } from '../lib/format'
 import { sortOffers, type SortKey } from './Home'
 
@@ -54,7 +54,7 @@ export default function Catalog() {
       crumbs={[{ to: '/', label: 'Главная' }, { label: 'Каталог' }]}
       title={cat === 'all' ? 'Каталог' : categoryById(cat)?.name}
       lead="Выберите, что вам нужно. Для каждого товара можно сравнить цены и условия у всех служб, где он есть."
-      art={<CatalogArt />}
+      art={<ScenePhoto id={SCENE.catalog} ratio="4 / 3" />}
     />
     <section className="section-s" style={{ paddingTop: 16 }}>
       <div className="container">
@@ -94,7 +94,7 @@ export default function Catalog() {
                     const n = offersByType(t.id).length
                     return (
                       <Link key={t.id} to={`/katalog/${t.id}`} className="pcard card-link">
-                        <div className="pcard-img"><ProductArt kind={t.art} palette={t.id.length % 5} label={t.name} /></div>
+                        <div className="pcard-img"><ProductArt typeId={t.id} palette={t.id.length % 5} label={t.name} /></div>
                         <div className="pcard-body">
                           <span className="pcard-title">{t.name}</span>
                           <span className="small muted">{n} {plural(n, 'служба', 'службы', 'служб')}</span>

@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import { GUIDE_FAQ, GUIDE_STEPS, SUPPORT_PHONE } from '../data/guide'
 import { telLink } from '../data/agencies'
-import { BenchArt, CandleArt, DotDeco } from '../components/Illustrations'
+import { ScenePhoto } from '../components/ProductArt'
+import { SCENE } from '../data/photos'
 import { Icon } from '../components/ui'
 import PageHead from '../components/PageHead'
 
@@ -12,7 +13,7 @@ export default function Guide() {
         crumbs={[{ to: '/', label: 'Главная' }, { label: 'Что делать сейчас' }]}
         title="Если близкий человек ушёл"
         lead="Нам очень жаль. Эта памятка поможет понять, что делать в первые часы и дни. Читайте в своём темпе, не нужно успеть всё сразу."
-        art={<CandleArt />}
+        art={<ScenePhoto id={SCENE.guideFirst} ratio="4 / 3" />}
       >
         <div className="row" style={{ marginTop: 24 }}>
           <a href={telLink(SUPPORT_PHONE)} className="btn btn-dark"><Icon name="phone" size={18} /> Позвонить нам</a>
@@ -58,7 +59,6 @@ export default function Guide() {
       </section>
 
       <section className="guides section">
-        <DotDeco style={{ left: -180, top: -80 }} />
         <div className="container narrow">
           <div className="guide-card">
             <div className="stack">
@@ -69,7 +69,7 @@ export default function Guide() {
                 <Link to="/kabinet/pamyatka" className="btn btn-outline">Чек-лист в кабинете</Link>
               </div>
             </div>
-            <div className="art"><BenchArt /></div>
+            <div className="art"><ScenePhoto id={SCENE.guideOrganize} ratio="4 / 3" /></div>
           </div>
         </div>
       </section>

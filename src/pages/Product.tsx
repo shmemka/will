@@ -39,15 +39,15 @@ export default function Product() {
         <Crumbs items={[{ to: '/', label: 'Главная' }, { to: '/katalog', label: 'Каталог' }, { to: `/katalog?cat=${cat.id}`, label: cat.name }, { label: type.name }]} />
         <div className="grid grid-2" style={{ gap: 40, alignItems: 'start' }}>
           <div>
-            <div className="gallery-main"><ProductArt kind={type.art} palette={offer.palette} view={view} label={`${type.name}, вид ${view + 1}`} /></div>
+            <div className="gallery-main"><ProductArt typeId={type.id} palette={offer.palette} view={view} label={`${type.name}, вид ${view + 1}`} /></div>
             <div className="thumbs">
               {[0, 1, 2].map((v) => (
                 <button key={v} className={'thumb' + (v === view ? ' active' : '')} onClick={() => setView(v)} aria-label={`Фото ${v + 1}`}>
-                  <ProductArt kind={type.art} palette={offer.palette} view={v} />
+                  <ProductArt typeId={type.id} palette={offer.palette} view={v} />
                 </button>
               ))}
             </div>
-            <p className="tiny muted" style={{ marginTop: 8 }}>В демо-версии вместо фотографий показаны иллюстрации.</p>
+            <p className="tiny muted" style={{ marginTop: 8 }}>Фотографии для примера. Точный вид товара служба покажет при подтверждении заказа.</p>
           </div>
 
           <div className="stack-l">

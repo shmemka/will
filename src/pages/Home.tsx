@@ -4,7 +4,9 @@ import { CATEGORIES, OFFERS, offersByCategory, type Offer } from '../data/catalo
 import { AGENCIES, telLink } from '../data/agencies'
 import { SUPPORT_PHONE } from '../data/guide'
 import ProductCard from '../components/ProductCard'
-import { BenchArt, CandleArt, CatalogArt, DotDeco, HandshakeArt, HeroScene, OrganizeArt, PhoneArt, TornEdge } from '../components/Illustrations'
+import { TornEdge } from '../components/Illustrations'
+import { ScenePhoto } from '../components/ProductArt'
+import { SCENE } from '../data/photos'
 import { Icon } from '../components/ui'
 
 export type SortKey = 'popular' | 'cheap' | 'expensive' | 'rating'
@@ -26,7 +28,7 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="container hero-in">
-          <HeroScene className="hero-art" />
+          <div className="hero-text">
           <h1>Поможем проститься бережно</h1>
           <p className="lead">
             Всё необходимое для прощания в одном месте. Честные цены от проверенных служб Москвы, без спешки и навязанных услуг.
@@ -44,6 +46,8 @@ export default function Home() {
           <p className="hero-note">
             Близкий человек ушёл только что? <Link to="/chto-delat">Что делать в первые часы</Link>
           </p>
+          </div>
+          <ScenePhoto id={SCENE.hero} className="hero-photo" alt="Свечи и белые цветы" />
         </div>
         <TornEdge color="#ffdf4e" />
       </section>
@@ -103,19 +107,19 @@ export default function Home() {
       <section className="section bg-soft rule">
         <div className="container grid grid-3">
           <Link to="/soprovozhdenie" className="service">
-            <div className="service-art"><OrganizeArt /></div>
+            <ScenePhoto id={SCENE.support} className="service-photo" ratio="16 / 10" alt="Близкие поддерживают друг друга" />
             <h3>Сопровождение</h3>
             <p>Зададим несколько вопросов, предложим три варианта и поможем пройти по шагам.</p>
             <span className="btn btn-primary btn-split">Начать подбор <Icon name="arrow" /></span>
           </Link>
           <Link to="/katalog" className="service">
-            <div className="service-art"><CatalogArt /></div>
+            <ScenePhoto id={SCENE.catalog} className="service-photo" ratio="16 / 10" alt="Корзина живых цветов" />
             <h3>Каталог</h3>
             <p>Гробы, урны, цветы, транспорт и услуги. Сравните цены у всех служб.</p>
             <span className="btn btn-primary btn-split">Перейти в каталог <Icon name="arrow" /></span>
           </Link>
           <Link to="/partneram" className="service">
-            <div className="service-art"><HandshakeArt /></div>
+            <ScenePhoto id={SCENE.partners} className="service-photo" ratio="16 / 10" alt="Подписание документов" />
             <h3>Для служб</h3>
             <p>Честные предоплаченные заказы без покупки данных. Комиссия только с выполненных.</p>
             <span className="btn btn-primary btn-split">Стать партнёром <Icon name="arrow" /></span>
@@ -140,7 +144,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <PhoneArt className="call-art" />
+            <ScenePhoto id={SCENE.call} className="call-photo" ratio="4 / 3" alt="Белые лилии" />
           </div>
           <hr className="divider" style={{ margin: '72px 0' }} />
           <div className="panel center">
@@ -157,8 +161,6 @@ export default function Home() {
       </section>
 
       <section className="guides section">
-        <DotDeco style={{ left: -180, top: -60 }} />
-        <DotDeco style={{ right: -200, bottom: -120 }} />
         <div className="container narrow">
           <div className="center stack" style={{ marginBottom: 36 }}>
             <h2>Памятки</h2>
@@ -167,15 +169,15 @@ export default function Home() {
           <div className="stack" style={{ gap: 16 }}>
             <Link to="/chto-delat" className="guide-card">
               <div><h3>Что делать, если близкий человек ушёл</h3><span className="more">Читать памятку <Icon name="arrow" size={16} /></span></div>
-              <div className="art"><CandleArt /></div>
+              <div className="art"><ScenePhoto id={SCENE.guideFirst} ratio="4 / 3" alt="Свеча в ладонях" /></div>
             </Link>
             <Link to="/soprovozhdenie" className="guide-card">
               <div><h3>Как спокойно организовать прощание</h3><span className="more">Начать подбор <Icon name="arrow" size={16} /></span></div>
-              <div className="art"><BenchArt /></div>
+              <div className="art"><ScenePhoto id={SCENE.guideOrganize} ratio="4 / 3" alt="Зал для прощания" /></div>
             </Link>
             <Link to="/chto-delat" className="guide-card">
               <div><h3>Какие выплаты и бесплатные услуги положены</h3><span className="more">Узнать <Icon name="arrow" size={16} /></span></div>
-              <div className="art"><OrganizeArt /></div>
+              <div className="art"><ScenePhoto id={SCENE.guideMoney} ratio="4 / 3" alt="Документы с печатью" /></div>
             </Link>
           </div>
         </div>

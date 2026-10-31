@@ -14,7 +14,7 @@ export default function ProductCard({ offer, compact }: { offer: Offer; compact?
   return (
     <article className="pcard">
       <Link to={`/tovar/${offer.id}`} className="pcard-img" aria-label={offerTitle(offer)}>
-        <ProductArt kind={type.art} palette={offer.palette} label={type.name} />
+        <ProductArt typeId={type.id} palette={offer.palette} label={type.name} />
         {offer.available === 'today' && <span className="pcard-flag">Можно сегодня</span>}
       </Link>
       <div className="pcard-body">

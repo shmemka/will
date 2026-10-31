@@ -8,7 +8,8 @@ import { agencyById } from '../../data/agencies'
 import { CHECKLIST } from '../../data/guide'
 import { offerById, offerTitle } from '../../data/catalog'
 import { Icon } from '../../components/ui'
-import { SmallHeart } from '../../components/Illustrations'
+import { ScenePhoto } from '../../components/ProductArt'
+import { SCENE } from '../../data/photos'
 
 export default function Account() {
   const { user, ready } = useAuth()
@@ -61,7 +62,7 @@ function Login() {
     <section className="section">
       <div className="container" style={{ maxWidth: 520 }}>
         <div className="card stack-l" style={{ padding: 32 }}>
-          <SmallHeart className="intro-art" />
+          <ScenePhoto id={SCENE.lilies} className="intro-photo" ratio="16 / 9" />
           <div className="stack" style={{ gap: 6 }}>
             <h1 style={{ fontSize: 32 }}>Вход в личный кабинет</h1>
             <p className="muted">Укажите почту, на которую оформляли заказ. {isDemo ? 'В демо-версии вход происходит сразу.' : 'Мы пришлём ссылку для входа, пароль не нужен.'}</p>

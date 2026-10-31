@@ -5,8 +5,8 @@ import {
   TRADITION_NOTES, type Answers, type PackageId,
 } from '../data/flow'
 import { AVAILABILITY, agencyOfOffer, offerById, offersByType, typeById } from '../data/catalog'
-import ProductArt from '../components/ProductArt'
-import { OrganizeArt } from '../components/Illustrations'
+import ProductArt, { ScenePhoto } from '../components/ProductArt'
+import { SCENE } from '../data/photos'
 import { Icon, Stars } from '../components/ui'
 import { load, plural, rub, save, uid } from '../lib/format'
 import { useCart, useToast } from '../lib/store'
@@ -64,7 +64,7 @@ function Intro({ resume, onStart, onResume }: { resume: boolean; onStart: () => 
   return (
     <section className="section">
       <div className="container flow-wrap stack-l" style={{ alignItems: 'center', textAlign: 'center' }}>
-        <OrganizeArt className="intro-art" />
+        <ScenePhoto id={SCENE.roses} className="intro-photo" ratio="16 / 9" />
         <h1 style={{ fontSize: 'clamp(30px,4vw,46px)' }}>Мы рядом. Давайте разберёмся вместе</h1>
         <p className="lead" style={{ maxWidth: 620 }}>
           Сначала зададим несколько простых вопросов, чтобы понять вашу ситуацию. Потом предложим три варианта и поможем пройти по шагам: что выбрать, а что можно пропустить.
@@ -321,7 +321,7 @@ function Checkpoints({ d, up }: { d: Draft; up: (p: Partial<Draft>) => void }) {
                   const sel = d.picks[activeType] === o.id
                   return (
                     <button key={o.id} className={'offer-pick' + (sel ? ' selected' : '')} onClick={() => toggle(o.id)} aria-pressed={sel}>
-                      <div className="art"><ProductArt kind={type.art} palette={o.palette} /></div>
+                      <div className="art"><ProductArt typeId={type.id} palette={o.palette} /></div>
                       <div style={{ minWidth: 0 }}>
                         <b style={{ display: 'block' }}>{a.name}</b>
                         <span className="row small" style={{ gap: 6 }}><Stars value={o.rating} size={12} /> <span className="muted">{o.rating.toFixed(1)} · {AVAILABILITY[o.available].toLowerCase()}</span></span>
